@@ -1,6 +1,7 @@
 import React, { ChangeEvent, useState } from "react";
 import { InputBar } from "../../components/InputBar/InputBar";
 import { Button } from "../../components/Button/Button";
+import { MusicCard } from "../MusicCard/MusicCard";
 
 export const Main = () => {
     const [searchInput, setInput] = useState("")
@@ -22,11 +23,7 @@ export const Main = () => {
                 onInputChange={handleInput}
                 inputString={searchInput}
             />
-            <Button
-                buttonName="Test"
-                buttonType="Test"
-                onClick={emptyFunction}
-            />
+            <MusicCard/>
         </div>
     )
 }
