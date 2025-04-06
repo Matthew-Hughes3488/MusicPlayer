@@ -1,6 +1,5 @@
 import React, { ChangeEvent, useState } from "react";
 import { InputBar } from "../../components/InputBar/InputBar";
-import { Button } from "../../components/Button/Button";
 import { MusicCard } from "../MusicCard/MusicCard";
 
 export const Main = () => {
