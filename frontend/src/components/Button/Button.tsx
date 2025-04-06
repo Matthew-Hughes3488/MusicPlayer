@@ -1,9 +1,15 @@
 import React from "react";
 
-export const Buton = () => {
-    return(
-        <div>
+type ButtonProps = {
+    buttonName : string,
+    buttonType : string,
+    onClick : () => void 
+}
 
+export const Buton = ({onClick, buttonName, buttonType} : ButtonProps) => {
+    return(
+        <div className="button-component">
+            <button className={"button-" + buttonType} onClick={onClick}>{buttonName}</button>
         </div>
     )
 }
