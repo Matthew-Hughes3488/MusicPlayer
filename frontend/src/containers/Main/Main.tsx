@@ -6,9 +6,11 @@ import { MusicCard } from "../MusicCard/MusicCard";
 export const Main = () => {
     const [searchInput, setInput] = useState("")
 
-    const emptyFunction = () =>{
-        console.log('Test')
-    }
+    const emptyFunction = (event: React.FormEvent<HTMLFormElement>) => {
+        event.preventDefault();
+        console.log("Test");
+      };
+      
 
     const handleInput = (event: ChangeEvent<HTMLInputElement>) => {
         const value: string = event.currentTarget.value;
