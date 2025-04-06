@@ -23,7 +23,7 @@ export const InputBar = ({onSubmit, onInputChange, inputString} : InputBarProps)
             onChange={onInputChange}
             />
             <button className="input-bar__input-form--submit" type="submit">
-            +
+            🔍
             </button>
       </form>
         </section>
