@@ -1,6 +1,6 @@
 import React, { ChangeEvent, useState } from "react";
 import { InputBar } from "../../components/InputBar/InputBar";
-import { Buton } from "../../components/Button/Button";
+import { Button } from "../../components/Button/Button";
 
 export const Main = () => {
     const [searchInput, setInput] = useState("")
@@ -21,6 +21,11 @@ export const Main = () => {
                 onSubmit={emptyFunction}
                 onInputChange={handleInput}
                 inputString={searchInput}
+            />
+            <Button
+                buttonName="Test"
+                buttonType="Test"
+                onClick={emptyFunction}
             />
         </div>
     )

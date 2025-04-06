@@ -6,7 +6,7 @@ type ButtonProps = {
     onClick : () => void 
 }
 
-export const Buton = ({onClick, buttonName, buttonType} : ButtonProps) => {
+export const Button = ({onClick, buttonName, buttonType} : ButtonProps) => {
     return(
         <div className="button-component">
             <button className={"button-component__" + buttonType} onClick={onClick}>{buttonName}</button>
