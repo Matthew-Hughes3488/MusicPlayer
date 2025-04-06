@@ -3,11 +3,15 @@ import {Main} from './containers/Main/Main';
 import { Login } from './containers/Login/Login';
 
 function App() {
-  const [isLoggedIn, setLoggedIn] = useState(true)
+  const [isLoggedIn, setLoggedIn] = useState(false)
+
+  const authorise = () =>{
+    setLoggedIn(!isLoggedIn)
+  }
 
   return (
     <div className="App">
-      {isLoggedIn ? <Main/> : <Login/>}
+      {isLoggedIn ? <Main/> : <Login authFunction={authorise}/>}
     </div>
   );
 }
