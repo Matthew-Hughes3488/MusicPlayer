@@ -1,5 +1,6 @@
 import React from "react";
 import { MusicControls } from "../../components/MusicControls/MusicControls";
+import { SongCard } from "../../components/SongCard/SongCard";
 
 export const MusicCard = () => {
 
@@ -15,6 +16,7 @@ export const MusicCard = () => {
 
     return(
         <div>
+            <SongCard songTitle="Test Song" artistName="Test Artist"/>
             <MusicControls buttonConfigs={buttonConfigs}/>
         </div>
     )
