@@ -172,3 +172,29 @@ cython_debug/
 
 # PyPI configuration file
 .pypirc
+
+# Node dependencies (frontend)
+frontend/node_modules/
+
+# Optional: package-lock.json (if you don't want to commit it)
+frontend/package-lock.json
+
+# React build files
+frontend/build/
+
+# Python virtual environment (backend)
+backend/venv/
+
+# Python bytecode files
+*.pyc
+
+# IDE/editor files
+.vscode/
+.idea/
+
+# OS-specific files
+.DS_Store   # macOS
+Thumbs.db   # Windows
+
+# Log files
+*.log
