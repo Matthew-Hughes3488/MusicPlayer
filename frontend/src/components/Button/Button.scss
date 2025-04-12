@@ -1,0 +1,15 @@
+@use "./../../Variables.scss" as *;
+
+.button {
+    &__Test{
+        background-color: $color-steel;
+        color: white;
+        border: none;
+        width: fit-content;
+        padding: 0.5rem 0.5rem;
+        border-radius: 8px;
+        cursor: pointer;
+        margin-left: 0.5rem;
+    }
+  }
+  

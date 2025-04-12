@@ -1,0 +1,9 @@
+@use "./../../Variables.scss" as *;
+
+.header{
+    margin-bottom: 1rem;
+    padding-bottom: 1rem;
+    width: 100vw;
+    height: 3rem;
+    background-color: $color-black;
+}

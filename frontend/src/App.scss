@@ -1,14 +1,16 @@
 @use "./Variables.scss" as *;
 *{
-    margin: 10px;
+    margin: 0;
     padding: 0;
     box-sizing: border-box;
+    color: $color-aqua;
 }
 
 .app-wrapper {
     display: flex;
     justify-content: center;  
-    align-items: center;      
+    align-items: center;    
+    flex-direction: column;  
     height: 100vh;     
-    background-color: #f4f4f4; 
+    background-color: $color-grey; 
 }

@@ -1,1 +1,12 @@
-/*# sourceMappingURL=Button.css.map */
+@import url("https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100..900;1,100..900&display=swap");
+.button__Test {
+  background-color: #50717b;
+  color: white;
+  border: none;
+  width: -moz-fit-content;
+  width: fit-content;
+  padding: 0.5rem 0.5rem;
+  border-radius: 8px;
+  cursor: pointer;
+  margin-left: 0.5rem;
+}/*# sourceMappingURL=Button.css.map */

@@ -1,3 +1,4 @@
+import "./MusicControls.scss"
 import { Button } from "../Button/Button";
 
 type ButtonConfig = {
@@ -24,5 +25,5 @@ export const MusicControls = ({buttonConfigs} : MusicControlsProps) => {
     />
   ));
 
-  return <div className="music-controls-component">{renderButtons}</div>;
+  return <section className="music-controls">{renderButtons}</section>;
 };

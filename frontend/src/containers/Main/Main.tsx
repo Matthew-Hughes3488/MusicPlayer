@@ -1,3 +1,4 @@
+import "./Main.scss"
 import React, { ChangeEvent, useState } from "react";
 import { InputBar } from "../../components/InputBar/InputBar";
 import { MusicCard } from "../MusicCard/MusicCard";
