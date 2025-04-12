@@ -1,3 +1,4 @@
+import "./App.scss";
 import React, { useState } from 'react';
 import {Main} from './containers/Main/Main';
 import { Login } from './containers/Login/Login';
@@ -10,7 +11,7 @@ function App() {
   }
 
   return (
-    <div className="App">
+    <div className="app-wrapper">
       {isLoggedIn ? <Main/> : <Login authFunction={authorise}/>}
     </div>
   );

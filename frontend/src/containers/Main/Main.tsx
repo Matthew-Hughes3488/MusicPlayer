@@ -13,18 +13,17 @@ export const Main = () => {
 
     const handleInput = (event: ChangeEvent<HTMLInputElement>) => {
         const value: string = event.currentTarget.value;
-        console.log(value)
         setInput(value);
     };
 
     return(
-        <div>
+        <section className="main-page">
             <InputBar
                 onSubmit={emptyFunction}
                 onInputChange={handleInput}
                 inputString={searchInput}
             />
             <MusicCard/>
-        </div>
+        </section>
     )
 }
