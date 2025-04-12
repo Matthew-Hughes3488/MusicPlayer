@@ -1,3 +1,4 @@
+import "./Button.scss"
 import React from "react";
 
 type ButtonProps = {
@@ -8,8 +9,8 @@ type ButtonProps = {
 
 export const Button = ({onClick, buttonName, buttonType} : ButtonProps) => {
     return(
-        <div className="button-component">
-            <button className={"button-component__" + buttonType} onClick={onClick}>{buttonName}</button>
+        <div className="button">
+            <button className={"button__" + buttonType} onClick={onClick}>{buttonName}</button>
         </div>
     )
 }

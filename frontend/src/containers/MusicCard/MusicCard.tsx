@@ -1,3 +1,4 @@
+import "./MusicCard.scss"
 import React from "react";
 import { MusicControls } from "../../components/MusicControls/MusicControls";
 import { SongCard } from "../../components/SongCard/SongCard";
@@ -9,15 +10,17 @@ export const MusicCard = () => {
     }
 
     const buttonConfigs = [
-        { name: "Prev", type: "prev", onClick: () => testFunction() },
-        { name: "Play", type: "play", onClick: () => testFunction() },
-        { name: "Next", type: "next", onClick: () => testFunction() },
+        { name: "Prev", type: "Test", onClick: () => testFunction() },
+        { name: "Play", type: "Test", onClick: () => testFunction() },
+        { name: "Next", type: "Test", onClick: () => testFunction() },
       ];
 
     return(
-        <div>
+        <div className="music-card">
             <SongCard songTitle="Test Song" artistName="Test Artist"/>
-            <MusicControls buttonConfigs={buttonConfigs}/>
+            <section className="music-card__controlls">
+                <MusicControls buttonConfigs={buttonConfigs}/>
+            </section>
         </div>
     )
 }
