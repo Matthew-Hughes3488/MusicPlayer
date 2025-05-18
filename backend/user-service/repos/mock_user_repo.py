@@ -34,3 +34,11 @@ class MockUserRepository(UserRepository):
         users.remove(user)
         users.append(user_input)
         return user_input
+    
+    def remove_user(self, id: int) -> None:
+        users = self.get_all_users()
+        for user in users:
+            if user.id == id:
+                users.remove(user)
+                break
+        return None

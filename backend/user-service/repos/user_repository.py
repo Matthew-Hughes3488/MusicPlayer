@@ -35,3 +35,11 @@ class UserRepository(ABC):
         :return: The updated user object if successful, None otherwise.
         """
         pass
+    @abstractmethod
+    def remove_user(self, user_id: str) -> None:
+        """
+        Delete a user by their ID.
+        :param user_id: The ID of the user to delete.
+        :return: None
+        """
+        pass

@@ -46,3 +46,10 @@ class MockUserService(UserService):
         
         self.user_repo.update_user(id, user)
         return user
+    
+    def delete_user(self, id: int) -> None:
+        user = self.get_user_by_id(id)
+        if not user:
+            raise UserNotFoundError(f'User with id {id} not found')
+        
+        self.user_repo.remove_user(id)

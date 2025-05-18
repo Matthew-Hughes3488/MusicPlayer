@@ -39,3 +39,11 @@ class UserService(ABC):
         :return: The updated user object if successful, None otherwise.
         """
         pass
+    @abstractmethod
+    def delete_user(self, id: int) -> None:
+        """
+        Delete a user by their ID.
+        :param id: The ID of the user to delete.
+        :return: None
+        """
+        pass
