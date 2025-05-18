@@ -6,4 +6,4 @@ class UserInputModel(BaseModel):
     email: str
     password: str
     first_name: str
-    last_name: str
+    last_name: Optional[str]

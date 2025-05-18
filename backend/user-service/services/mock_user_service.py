@@ -4,7 +4,7 @@ from models.user_model import UserModel
 from models.user_input_model import UserInputModel
 from utils.security import hash_password
 from errors_exceptions.exceptions import UserNotFoundError
-from user_service import UserService
+from services.user_service import UserService
 
 class MockUserService(UserService):
     def __init__(self, user_repo):

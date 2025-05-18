@@ -2,10 +2,10 @@ from typing import List, Optional
 from models.user_input_model import UserInputModel
 from models.user_model import UserModel
 from mock_data.mock_db import mock_users
-from user_repository import UserRepository
+from repos.user_repository import UserRepository
 
 class MockUserRepository(UserRepository):
-    def get_all_users() -> List[UserModel] :
+    def get_all_users(self) -> List[UserModel] :
         return mock_users
 
     def get_user_by_id(self, id: int) -> Optional[UserModel]:
@@ -34,11 +34,3 @@ class MockUserRepository(UserRepository):
         users.remove(user)
         users.append(user_input)
         return user_input
-    
-    def remove_user(self, id: int) -> None:
-        users = self.get_all_users()
-        for user in users:
-            if user.id == id:
-                users.remove(user)
-                break
-        return None

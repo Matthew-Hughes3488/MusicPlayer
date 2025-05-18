@@ -1,4 +1,4 @@
-from user_input_model import UserInputModel
+from models.user_input_model import UserInputModel
 from typing import Optional
 from datetime import datetime
 

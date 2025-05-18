@@ -1,4 +1,4 @@
-from models.user_input_model import UserModel
+from models.user_model import UserModel
 from datetime import datetime
 
 mock_users = [
