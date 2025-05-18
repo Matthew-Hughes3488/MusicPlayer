@@ -47,3 +47,11 @@ class UserService(ABC):
         :return: None
         """
         pass
+    @abstractmethod
+    def get_user_by_email(self, email: str) -> Optional[UserModel]:
+        """
+        Get a user by their email.
+        :param email: The email of the user to retrieve.
+        :return: The user object if found, None otherwise.
+        """
+        pass

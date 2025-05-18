@@ -53,3 +53,9 @@ class MockUserService(UserService):
             raise UserNotFoundError(f'User with id {id} not found')
         
         self.user_repo.remove_user(id)
+    
+    def get_user_by_email(self, email: str) -> UserModel:
+        user = self.user_repo.get_user_by_email(email)
+        if not user:
+            raise UserNotFoundError(f'User with email {email} not found')
+        return user
