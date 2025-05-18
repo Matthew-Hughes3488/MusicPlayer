@@ -1,32 +1,41 @@
-from typing import List
+#create a mock user service interface
+from typing import List, Optional
 from models.user_model import UserModel
 from models.user_input_model import UserInputModel
-from repos import user_repo
-from utils.security import hash_password
-from exceptions import *
+from abc import ABC, abstractmethod          
 
-def get_all_users() -> List[UserModel]:
-    return user_repo.get_all_users()
+class UserService(ABC):
+    @abstractmethod
+    def get_all_users(self) -> List[UserModel]:
+        """
+        Get all users.
+        :return: A list of all user objects.
+        """
+        pass
 
-def get_user_by_id(id : int) -> UserModel:
-    user = user_repo.get_user_by_id(id)
-    if not user:
-        raise UserNotFoundError(f'User with id {id} not found')
-    return user
+    @abstractmethod
+    def get_user_by_id(self, id: int) -> UserModel:
+        """
+        Get a user by their ID.
+        :param id: The ID of the user to retrieve.
+        :return: The user object if found, None otherwise.
+        """
+        pass
 
-def create_new_user(input: UserInputModel) -> UserModel:
-    new_id = len(get_all_users()) + 1
-    password = hash_password(input.password)
-    
-    new_user = UserModel(
-        email = input.email, 
-        password = password
-        first_name = input.first_name, 
-        last_name = input.last_name,
-        created_at=datetime.utcnow(),
-        updated_at=None
-        )
-    
-    user_repo.create_new_user(new_user)
-    return new_user
-    
+    @abstractmethod
+    def create_new_user(self, input: UserInputModel) -> UserModel:
+        """
+        Create a new user.
+        :param input: The user input object to create.
+        :return: The created user object.
+        """
+        pass
+    @abstractmethod
+    def update_user(self, id: int, user_input: UserModel) -> Optional[UserModel]:
+        """
+        Update an existing user.
+        :param id: The ID of the user to update.
+        :param user_input: The updated user object.
+        :return: The updated user object if successful, None otherwise.
+        """
+        pass

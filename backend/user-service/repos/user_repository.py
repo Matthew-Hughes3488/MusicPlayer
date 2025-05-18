@@ -1,6 +1,5 @@
 from abc import ABC, abstractmethod
 from models.user_model import UserModel
-from models.user_input_model import UserInputModel
 from typing import Optional
 
 class UserRepository(ABC):
@@ -28,7 +27,7 @@ class UserRepository(ABC):
         """
         pass
     @abstractmethod
-    def update_user(self, user_id: str, user: UserInputModel):
+    def update_user(self, user_id: str, user: UserModel) -> Optional[UserModel]:
         """
         Update an existing user.
         :param user_id: The ID of the user to update.
