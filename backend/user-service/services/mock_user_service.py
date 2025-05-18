@@ -20,6 +20,9 @@ class MockUserService(UserService):
         return user
 
     def create_new_user(self, input: UserInputModel) -> UserModel:
+        if self.user_repo.get_user_by_email(input.email):
+            raise ValueError(f'User with email {input.email} already exists')
+    
         new_id = len(self.get_all_users()) + 1
         password = hash_password(input.password)
         
@@ -37,8 +40,10 @@ class MockUserService(UserService):
         return new_user
     
     def update_user(self, id: int, user_input: UserModel) -> UserModel:
-        user = self.get_user_by_id(id)
+        if self.user_repo.get_user_by_email(user_input.email):
+            raise ValueError(f'User with email {user_input.email} already exists')
         
+        user = self.get_user_by_id(id)
         user.email = user_input.email
         user.first_name = user_input.first_name
         user.last_name = user_input.last_name

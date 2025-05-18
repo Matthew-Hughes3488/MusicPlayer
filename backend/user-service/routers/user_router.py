@@ -6,7 +6,6 @@ from services.mock_user_service import MockUserService
 from repos.mock_user_repo import MockUserRepository
 from errors_exceptions.exceptions import UserNotFoundError
 
-
 router = APIRouter()
 user_service = MockUserService(user_repo=MockUserRepository())
 
