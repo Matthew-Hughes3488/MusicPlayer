@@ -5,7 +5,7 @@ from datetime import datetime
 class Album(AlbumInput):
     id: int
 
-    class Config:
+    class ConfigDict:
         orm_mode = True
         anystr_strip_whitespace = True
         validate_assignment = True
