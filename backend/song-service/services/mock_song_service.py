@@ -23,14 +23,18 @@ class MockSongService(SongService):
          return song
 
     def create_new_song(self, input: SongInput) -> Optional[Song]:
-        new_song = Song(id=self.id_count
-                          , title =input.title
-                          , artist=input.artist
-                          , genre=input.genre
-                          , description=input.description
-                          , cover_image_url=input.cover_image_url
-                          , created_at=input.created_at
-                          , updated_at=input.updated_at
+        new_song = Song(
+            id=self.id_count,
+            title=input.title,
+            artist=input.artist,
+            genre=input.genre,
+            file_url=input.file_url,
+            duration=input.duration,
+            description=input.description,
+            cover_image_url=input.cover_image_url,
+            release_date=input.release_date,
+            created_at=datetime.now(),
+            updated_at=datetime.now()
         )
         self.id_count += 1
         return self.song_repository.create_song(new_song)
@@ -46,6 +50,9 @@ class MockSongService(SongService):
             title=song_input.title if song_input.title else existing_song.title,
             artist=song_input.artist if song_input.artist else existing_song.artist,
             genre=song_input.genre if song_input.genre else existing_song.genre,
+            file_url=song_input.file_url if song_input.file_url else existing_song.file_url,
+            duration=song_input.duration if song_input.duration else existing_song.duration,
+            release_date=song_input.release_date if song_input.release_date else existing_song.release_date,
             description=song_input.description if song_input.description else existing_song.description,
             cover_image_url=song_input.cover_image_url if song_input.cover_image_url else existing_song.cover_image_url,
             created_at=existing_song.created_at,
