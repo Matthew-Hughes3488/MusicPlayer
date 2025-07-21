@@ -36,5 +36,9 @@ class MockSongRepository(SongRepository):
     def list_songs(self) -> List[Song]:
         return self.mock_db.copy()
     
+    # TODO: implement get_songs_by_album_id
+    def get_songs_by_album_id(self, album_id: int) -> List[Song]:
+        pass
+    
     
         

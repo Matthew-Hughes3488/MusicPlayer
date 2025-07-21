@@ -2,7 +2,7 @@ from models.song_input import SongInput
 from typing import Optional
 from datetime import datetime
 
-class Song(AlbumInput):
+class Song(SongInput):
     id: int
 
     class ConfigDict:
