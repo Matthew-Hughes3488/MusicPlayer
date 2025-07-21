@@ -1,9 +1,5 @@
-class AlbumNotFoundError(Exception):
-    """Raised when a user cannot be found in the system."""
-    pass
-
-class InvalidCredentialsError(Exception):
-    """Raised when login credentials are invalid."""
+class SongNotFoundError(Exception):
+    """Raised when a song cannot be found in the system."""
     pass
 
 class PermissionDeniedError(Exception):
