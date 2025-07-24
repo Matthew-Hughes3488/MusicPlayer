@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, String, DateTime
+from sqlalchemy import Column, Integer, String, DateTime, relationship
 from base import Base
 
 class User(Base):
@@ -11,3 +11,4 @@ class User(Base):
     last_name = Column(String(255))
     created_at = Column(DateTime, nullable=False)
     updated_at = Column(DateTime)
+    likes = relationship("Song", secondary="user_likes", back_populates="User")
