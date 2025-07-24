@@ -1,5 +1,7 @@
-from sqlalchemy import Column, Integer, String, DateTime, relationship
-from base import Base
+from sqlalchemy import Column, Integer, String, DateTime
+from sqlalchemy.orm import relationship
+from database.models.base import Base
+from database.models.user_likes import user_likes
 
 class User(Base):
     __tablename__ = "USERS"
@@ -11,4 +13,4 @@ class User(Base):
     last_name = Column(String(255))
     created_at = Column(DateTime, nullable=False)
     updated_at = Column(DateTime)
-    likes = relationship("Song", secondary="user_likes", back_populates="User")
+    likes = relationship("Song", secondary=user_likes, back_populates="user_likes")

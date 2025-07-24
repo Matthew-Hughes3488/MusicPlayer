@@ -2,7 +2,7 @@ import os
 from sqlalchemy import create_engine, text
 from sqlalchemy.orm import sessionmaker
 from dotenv import load_dotenv
-
+from database.models.base import Base
 load_dotenv()
 
 class DatabaseConnector:
@@ -18,6 +18,8 @@ class DatabaseConnector:
         print("Connecting to database:", self.DATABASE_URL)
         self.engine = create_engine(self.DATABASE_URL, echo=True)
         self.SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=self.engine)
+
+        Base.metadata.create_all(bind=self.engine)
 
     def get_session(self):
         return self.SessionLocal()

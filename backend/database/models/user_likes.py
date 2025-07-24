@@ -1,5 +1,5 @@
 from sqlalchemy import Table, Column, Integer, ForeignKey
-from base import Base
+from database.models.base import Base
 
 user_likes = Table(
     "USER_LIKES",
