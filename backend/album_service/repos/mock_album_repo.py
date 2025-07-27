@@ -1,7 +1,7 @@
-from repos.album_repository import AlbumRepository
-from models.album import Album
+from backend.album_service.repos.album_repository import AlbumRepository
+from backend.album_service.models.album import Album
 from typing import Optional, List
-from mock_data.mock_albums import mock_albums
+from backend.album_service.mock_data.mock_albums import mock_albums
 from copy import deepcopy
 
 class MockAlbumRepository(AlbumRepository):

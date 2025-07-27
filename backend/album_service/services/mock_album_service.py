@@ -1,9 +1,9 @@
-from services.album_service import AlbumService
-from models.album import Album
-from models.album_input import AlbumInput
+from backend.album_service.services.album_service import AlbumService
+from backend.album_service.models.album import Album
+from backend.album_service.models.album_input import AlbumInput
 from typing import Optional, List
-from repos.album_repository import AlbumRepository
-from errors_exceptions.exceptions import AlbumNotFoundError
+from backend.album_service.repos.album_repository import AlbumRepository
+from backend.album_service.errors_exceptions.exceptions import AlbumNotFoundError
 from datetime import datetime
 
 class MockAlbumService(AlbumService):

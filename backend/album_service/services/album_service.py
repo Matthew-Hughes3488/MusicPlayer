@@ -1,6 +1,6 @@
-from repos.album_repository import AlbumRepository
-from models.album import Album
-from models.album_input import AlbumInput
+from backend.album_service.repos.album_repository import AlbumRepository
+from backend.album_service.models.album import Album
+from backend.album_service.models.album_input import AlbumInput
 from typing import Optional, List
 from abc import ABC, abstractmethod  
 
@@ -42,7 +42,7 @@ class AlbumService(ABC):
         pass
 
     @abstractmethod
-    def delete_album(self, id: int) -> None:
+    def delete_album(self, id: int) -> bool:
         """
         Delete an album by its ID.
         :param id: The ID of the album to delete.

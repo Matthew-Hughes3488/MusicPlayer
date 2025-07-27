@@ -1,4 +1,4 @@
-from models.album_input import AlbumInput
+from backend.album_service.models.album_input import AlbumInput
 from typing import Optional
 from datetime import datetime
 

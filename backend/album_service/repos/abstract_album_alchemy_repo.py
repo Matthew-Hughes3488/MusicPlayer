@@ -1,8 +1,8 @@
 from abc import ABC, abstractmethod
-from models.album import Album
-from typing import Optional
+from typing import List, Optional
+from backend.database.models.album_model import Album
 
-class AlbumRepository(ABC):
+class AbstractAlbumAlchemyRepository(ABC):
     @abstractmethod
     def create_album(self, album: Album) -> Album:
         """Create a new album."""
@@ -14,7 +14,7 @@ class AlbumRepository(ABC):
         pass
 
     @abstractmethod
-    def update_album(self, album: Album) -> Optional[Album]:
+    def update_album(self, album: Album) -> Album:
         """Update an existing album."""
         pass
 
@@ -24,6 +24,11 @@ class AlbumRepository(ABC):
         pass
 
     @abstractmethod
-    def list_albums(self) -> list[Album]:
+    def list_albums(self) -> List[Album]:
         """List all albums."""
+        pass
+
+    @abstractmethod
+    def get_songs_by_album_id(self, album_id: int) -> List[Album]:
+        """Retrieve all songs associated with a specific album."""
         pass

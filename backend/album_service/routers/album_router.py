@@ -1,14 +1,13 @@
 from fastapi import APIRouter, HTTPException, Depends
 from typing import List
-from models.album import Album
-from models.album_input import AlbumInput
-from services.album_service import AlbumService
-from repos.album_repository import AlbumRepository
-from services.mock_album_service import MockAlbumService
-from repos.mock_album_repo import MockAlbumRepository
+from backend.album_service.models.album import Album
+from backend.album_service.models.album_input import AlbumInput
+from backend.album_service.repos.album_alchemy_repo import AlbumAlchemyRepository
+from backend.album_service.services.album_alchemy_service import AlbumAlchemyService
+from backend.album_service.models.song import Song
 
 router = APIRouter()
-album_service = MockAlbumService(album_repository=MockAlbumRepository())
+album_service = AlbumAlchemyService(album_repository=AlbumAlchemyRepository())
 
 @router.get("/albums", response_model=List[Album])
 async def get_all_albums():
@@ -69,5 +68,17 @@ async def delete_album(album_id: int):
     try:
         album_service.delete_album(album_id)
         return {"detail": "Album deleted successfully"}
+    except Exception as e:
+        raise HTTPException(status_code=404, detail=str(e))
+
+@router.get("/albums/{album_id}/songs", response_model=List[Song])
+async def get_album_songs(album_id: int):
+    """
+    Get all songs in an album.
+    :param album_id: The ID of the album to retrieve songs from.
+    :return: A list of song titles in the album.
+    """
+    try:
+        return album_service.get_album_songs(album_id)
     except Exception as e:
         raise HTTPException(status_code=404, detail=str(e))

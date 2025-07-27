@@ -2,7 +2,10 @@ import os
 from sqlalchemy import create_engine, text
 from sqlalchemy.orm import sessionmaker
 from dotenv import load_dotenv
-from database.models.base import Base
+from backend.database.models.base import Base
+from backend.database.models.album_model import Album
+from backend.database.models.song_model import Song
+from backend.database.models.user_model import User
 load_dotenv()
 
 class DatabaseConnector:

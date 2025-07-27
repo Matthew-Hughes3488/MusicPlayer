@@ -1,6 +1,6 @@
 import pytest
-from repos.mock_album_repo import MockAlbumRepository
-from models.album import Album
+from backend.album_service.repos.mock_album_repo import MockAlbumRepository
+from backend.album_service.models.album import Album
 from datetime import datetime
 
 @pytest.fixture

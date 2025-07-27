@@ -1,4 +1,4 @@
-from models.album import Album
+from backend.album_service.models.album import Album
 from datetime import datetime
 
 mock_albums = [
