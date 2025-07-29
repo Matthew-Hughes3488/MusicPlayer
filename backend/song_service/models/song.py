@@ -1,5 +1,4 @@
-from models.song_input import SongInput
-from typing import Optional
+from backend.song_service.models.song_input import SongInput
 from datetime import datetime
 
 class Song(SongInput):

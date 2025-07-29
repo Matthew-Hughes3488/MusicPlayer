@@ -1,6 +1,7 @@
 from abc import ABC, abstractmethod
 from typing import List, Optional
 from backend.database.models.album_model import Album
+from backend.album_service.models.album_update_input import AlbumUpdateInput
 
 class AbstractAlbumAlchemyRepository(ABC):
     @abstractmethod
@@ -14,7 +15,7 @@ class AbstractAlbumAlchemyRepository(ABC):
         pass
 
     @abstractmethod
-    def update_album(self, album: Album) -> Album:
+    def update_album(self, album_id: int, album: AlbumUpdateInput) -> Album:
         """Update an existing album."""
         pass
 
