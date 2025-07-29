@@ -3,6 +3,7 @@ from backend.database.models.album_model import Album
 from backend.database.models.song_model import Song as SongModel
 from backend.album_service.models.song import Song
 from backend.album_service.models.album_input import AlbumInput
+from backend.album_service.models.album_update_input import AlbumUpdateInput
 from backend.database.connector.connector import DatabaseConnector
 from backend.album_service.utils.model_to_model_functions import ModelConverter
 from typing import List, Optional
@@ -38,17 +39,27 @@ class AlbumAlchemyRepository(AbstractAlbumAlchemyRepository):
             album = db.query(Album).filter(Album.id == album_id).first()
         return album
     
-    def update_album(self, album: Album) -> Album:
+    def update_album(self, album_id: int, album_input: AlbumUpdateInput) -> Album:
         """Update an existing album."""
         with self.db_session() as db:
-            existing_album = db.query(Album).filter(Album.id == album.id).first()
-            if existing_album:
-                for key, value in album.__dict__.items():
-                    setattr(existing_album, key, value)
-                db.commit()
-                db.refresh(existing_album)
-                return existing_album
-            return None
+            album = db.query(Album).filter(Album.id == album_id).first()
+            if not album:
+                return None
+            
+            if album_input.title:
+                album.title = album_input.title
+            if album_input.artist:
+                album.artist = album_input.artist
+            if album_input.genre:
+                album.genre = album_input.genre
+            if album_input.description:
+                album.description = album_input.description
+            if album_input.cover_image_url:
+                album.cover_image_url = album_input.cover_image_url
+            
+            db.commit()
+            db.refresh(album)
+        return album
         
     def delete_album(self, album_id: int) -> bool:
         """Delete an album by its ID."""

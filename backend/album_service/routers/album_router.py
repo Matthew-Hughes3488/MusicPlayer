@@ -2,6 +2,7 @@ from fastapi import APIRouter, HTTPException, Depends
 from typing import List
 from backend.album_service.models.album import Album
 from backend.album_service.models.album_input import AlbumInput
+from backend.album_service.models.album_update_input import AlbumUpdateInput
 from backend.album_service.repos.album_alchemy_repo import AlbumAlchemyRepository
 from backend.album_service.services.album_alchemy_service import AlbumAlchemyService
 from backend.album_service.models.song import Song
@@ -44,7 +45,7 @@ async def create_album(album_input: AlbumInput):
         raise HTTPException(status_code=400, detail=str(e))
     
 @router.put("/albums/{album_id}", response_model=Album)
-async def update_album(album_id: int, album_input: AlbumInput):
+async def update_album(album_id: int, album_input: AlbumUpdateInput):
     """
     Update an existing album.
     :param album_id: The ID of the album to update.
