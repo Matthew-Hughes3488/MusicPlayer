@@ -1,6 +1,6 @@
-from repos.song_repository import SongRepository
-from models.song import Song
-from models.song_input import SongInput
+from backend.song_service.repos.song_repository import SongRepository
+from backend.song_service.models.song import Song
+from backend.song_service.models.song_input import SongInput
 from typing import Optional, List
 from abc import ABC, abstractmethod  
 

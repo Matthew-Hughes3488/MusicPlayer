@@ -1,5 +1,5 @@
 from abc import ABC, abstractmethod
-from models.song import Song
+from backend.song_service.models.song import Song
 from typing import Optional
 
 class SongRepository(ABC):

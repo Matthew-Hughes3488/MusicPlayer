@@ -3,11 +3,12 @@ from backend.song_service.models.song_input import SongInput
 from backend.song_service.models.song_update_input import SongUpdateInput
 from backend.song_service.errors_exceptions.exceptions import SongNotFoundError
 from backend.song_service.repos.abstract_alchemy_song_repo import AbstractAlchemySongRepo
+from backend.song_service.services.abstract_song_alchemy_service import AbstractSongAlchemyService
 from backend.song_service.utils.model_to_model_mapper import ModelToModelMapper
 
-class SongAlchemyService(AbstractAlchemySongRepo):
-    def __init__(self, song_repositor: AbstractAlchemySongRepo):
-        self.song_repository = song_repositor
+class SongAlchemyService(AbstractSongAlchemyService):
+    def __init__(self, song_repository: AbstractAlchemySongRepo):
+        self.song_repository = song_repository
         self.model_mapper = ModelToModelMapper()
 
     def get_all_songs(self) -> list[Song]:

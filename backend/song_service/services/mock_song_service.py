@@ -1,9 +1,9 @@
-from services.song_service import SongService
-from models.song import Song
-from models.song_input import SongInput
+from backend.song_service.services.song_service import SongService
+from backend.song_service.models.song import Song
+from backend.song_service.models.song_input import SongInput
 from typing import Optional, List
-from repos.song_repository import SongRepository
-from errors_exceptions.exceptions import SongNotFoundError
+from backend.song_service.repos.song_repository import SongRepository
+from backend.song_service.errors_exceptions.exceptions import SongNotFoundError
 from datetime import datetime
 
 class MockSongService(SongService):

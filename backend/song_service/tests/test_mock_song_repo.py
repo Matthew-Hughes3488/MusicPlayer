@@ -1,6 +1,6 @@
 import pytest
-from repos.mock_song_repo import MockSongRepository
-from models.song import Song
+from backend.song_service.repos.mock_song_repo import MockSongRepository
+from backend.song_service.models.song import Song
 from datetime import datetime
 
 @pytest.fixture

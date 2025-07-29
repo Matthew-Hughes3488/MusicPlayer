@@ -1,14 +1,14 @@
 from fastapi import APIRouter, HTTPException, Depends
 from typing import List
-from models.song import Song
-from models.song_input import SongInput
-from services.song_service import SongService
-from repos.song_repository import SongRepository
-from services.mock_song_service import MockSongService
-from repos.mock_song_repo import MockSongRepository
+from backend.song_service.models.song import Song
+from backend.song_service.models.song_input import SongInput
+from backend.song_service.models.song_update_input import SongUpdateInput
+from backend.song_service.repos.song_alchemy_repo import SongAlchemyRepository
+from backend.song_service.services.song_alchemy_service import SongAlchemyService
+
 
 router = APIRouter()
-song_service = MockSongService(song_repository=MockSongRepository())
+song_service = SongAlchemyService(song_repository=SongAlchemyRepository())
 
 @router.get("/songs", response_model=List[Song])
 async def get_all_songs():
@@ -45,7 +45,7 @@ async def create_song(song_input: SongInput):
         raise HTTPException(status_code=400, detail=str(e))
     
 @router.put("/songs/{song_id}", response_model=Song)
-async def update_song(song_id: int, song_input: SongInput):
+async def update_song(song_id: int, song_input: SongUpdateInput):
     """
     Update an existing song.
     :param song_id: The ID of the song to update.

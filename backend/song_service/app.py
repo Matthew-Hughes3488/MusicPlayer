@@ -1,5 +1,5 @@
 from fastapi import FastAPI
-from routers.song_router import router as song_router
+from backend.song_service.routers.song_router import router as song_router
 
 app = FastAPI()
 

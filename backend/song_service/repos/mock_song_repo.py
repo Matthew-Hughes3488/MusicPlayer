@@ -1,7 +1,7 @@
-from repos.song_repository import SongRepository
-from models.song import Song
-from typing import Optional, List
-from mock_data.mock_songs import mock_songs
+from backend.song_service.repos.song_repository import SongRepository
+from backend.song_service.models.song import Song
+from backend.song_service.typing import Optional, List
+from backend.song_service.mock_data.mock_songs import mock_songs
 from copy import deepcopy
 
 class MockSongRepository(SongRepository):

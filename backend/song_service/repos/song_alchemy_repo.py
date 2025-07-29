@@ -1,10 +1,10 @@
-from backend.song_service.repos.abstract_alchemy_song_repo import AbstractAlchemySongRepository
+from backend.song_service.repos.abstract_alchemy_song_repo import AbstractAlchemySongRepo
 from backend.database.models.song_model import Song
 from backend.song_service.models.song_update_input import SongUpdateInput
 from backend.database.connector.connector import DatabaseConnector
 from contextlib import contextmanager
 
-class SongAlchemyRepository(AbstractAlchemySongRepository):
+class SongAlchemyRepository(AbstractAlchemySongRepo):
     @contextmanager
     def db_session(self):
         """Context manager for database session."""

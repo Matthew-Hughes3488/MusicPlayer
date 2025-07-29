@@ -1,9 +1,9 @@
 import pytest
-from services.mock_song_service import MockSongService
-from models.song import Song
-from models.song_input import SongInput
+from backend.song_service.services.mock_song_service import MockSongService
+from backend.song_service.models.song import Song
+from backend.song_service.models.song_input import SongInput
 from datetime import datetime
-from errors_exceptions.exceptions import SongNotFoundError
+from backend.song_service.errors_exceptions.exceptions import SongNotFoundError
 
 '''
 Song models for reference:
