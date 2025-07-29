@@ -35,16 +35,9 @@ class SongAlchemyRepository(AbstractAlchemySongRepo):
             if not song:
                 return None
             
-            if song_input.title:
-                song.title = song_input.title
-            if song_input.artist:
-                song.artist = song_input.artist
-            if song_input.album:
-                song.album = song_input.album
-            if song_input.genre:
-                song.genre = song_input.genre
-            if song_input.duration:
-                song.duration = song_input.duration
+            for key, value in song_input.model_dump(exclude_unset=True).items():
+                if hasattr(song, key):
+                    setattr(song, key, value)
             
             db.commit()
             db.refresh(song)

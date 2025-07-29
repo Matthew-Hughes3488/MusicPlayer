@@ -18,6 +18,7 @@ class ModelToModelMapper():
             duration=song_input.duration,
             description=song_input.description,
             cover_image_url=song_input.cover_image_url,
+            created_at=song_input.created_at,
             release_date=song_input.release_date
         )
     

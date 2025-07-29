@@ -11,8 +11,8 @@ class SongUpdateInput(BaseModel):
     description: Optional[str] = Field(None, max_length=500)
     cover_image_url: Optional[str] = Field(None, max_length=255)
     release_date: Optional[datetime] = None
-    created_at: Optional[datetime] = Field(default_factory=datetime.now)
-    updated_at: Optional[datetime] = None
+    created_at: Optional[datetime] = Field(None)
+    updated_at: Optional[datetime] = Field(default_factory=datetime.now)
 
     class ConfigDict:
         orm_mode = True
