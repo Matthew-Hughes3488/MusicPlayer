@@ -1,7 +1,7 @@
 from connector import DatabaseConnector
-from database.models.album_model import Album
-from database.models.song_model import Song
-from database.models.user_model import User  # <-- Add this!
+from backend.database.models.album_model import Album
+from backend.database.models.song_model import Song
+from backend.database.models.user_model import User  # <-- Add this!
 
 session = DatabaseConnector().get_session()
 

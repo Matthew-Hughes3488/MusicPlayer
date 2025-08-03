@@ -1,7 +1,7 @@
 from sqlalchemy import Column, Integer, String, DateTime
 from sqlalchemy.orm import relationship
-from database.models.base import Base
-from database.models.user_likes import user_likes
+from backend.database.models.base import Base
+from backend.database.models.user_likes import user_likes
 
 class User(Base):
     __tablename__ = "USERS"

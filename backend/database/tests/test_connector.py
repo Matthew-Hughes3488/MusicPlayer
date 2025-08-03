@@ -1,5 +1,5 @@
 import pytest
-from database.connector.connector import DatabaseConnector
+from backend.database.connector.connector import DatabaseConnector
 
 @pytest.fixture
 def connector():

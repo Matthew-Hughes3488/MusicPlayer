@@ -1,10 +1,10 @@
 import pytest
-from database.connector.connector import DatabaseConnector
-from database.models.user_model import User
-from database.models.song_model import Song
-from database.models.album_model import Album
-from database.models.album_songs_model import album_songs
-from database.models.user_likes import user_likes
+from backend.database.connector.connector import DatabaseConnector
+from backend.database.models.user_model import User
+from backend.database.models.song_model import Song
+from backend.database.models.album_model import Album
+from backend.database.models.album_songs_model import album_songs
+from backend.database.models.user_likes import user_likes
 from sqlalchemy import select
 from datetime import datetime
 

@@ -1,8 +1,8 @@
 from sqlalchemy import Column, Integer, String, DateTime
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import relationship
-from database.models.base import Base
-from database.models.album_songs_model import album_songs
+from backend.database.models.base import Base
+from backend.database.models.album_songs_model import album_songs
 
 class Album(Base):
     __tablename__ = "ALBUMS"

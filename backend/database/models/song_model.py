@@ -1,8 +1,8 @@
 from sqlalchemy import Column, Integer, String, DateTime
 from sqlalchemy.orm import relationship
-from database.models.base import Base
-from database.models.album_songs_model import album_songs
-from database.models.user_likes import user_likes
+from backend.database.models.base import Base
+from backend.database.models.album_songs_model import album_songs
+from backend.database.models.user_likes import user_likes
 
 class Song(Base):
     __tablename__ = "SONGS"
