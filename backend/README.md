@@ -52,7 +52,18 @@ pip install -r requirements.txt
 
 **Note:** The project uses relative imports that require the Python path to be set correctly. Run all commands from the project root directory.
 
-### 2. Environment Configuration
+### 2. Verify Setup
+
+Run the verification script to check your setup:
+
+```bash
+# From project root directory
+python verify_setup.py
+```
+
+This script will verify that all dependencies are installed and services can be imported correctly.
+
+### 3. Environment Configuration
 
 Create a `.env` file in the backend directory:
 
@@ -73,7 +84,7 @@ JWT_ALGORITHM=HS256
 JWT_ACCESS_TOKEN_EXPIRE_MINUTES=30
 ```
 
-### 3. Database Setup
+### 4. Database Setup
 
 The application will automatically create tables on startup. Ensure your MySQL server is running and the database exists:
 
@@ -81,7 +92,7 @@ The application will automatically create tables on startup. Ensure your MySQL s
 CREATE DATABASE musicplayer_db;
 ```
 
-### 4. Running Services
+### 5. Running Services
 
 Each service can be run independently. **Important:** All commands should be run from the project root directory to ensure proper module imports.
 
