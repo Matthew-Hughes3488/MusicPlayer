@@ -18,43 +18,64 @@ class UserAlchemyRepo(AbstractAlchemyUserRepo):
 
     def get_user(self, user_id: int) -> Optional[User]:
         """Retrieve a user by ID."""
-        with self.get_session() as db:
-            return db.query(User).filter(User.id == user_id).first()
+        try:
+            with self.get_session() as db:
+                return db.query(User).filter(User.id == user_id).first()
+        except Exception as e:
+            print(f"Error retrieving user {user_id}: {e}")
+            return None
 
     def create_user(self, user: User) -> Optional[User]:
         """Create a new user."""
-        with self.get_session() as db:
-            db.add(user)
-            db.commit()
-            db.refresh(user)
-        return user
-    
+        try:
+            with self.get_session() as db:
+                db.add(user)
+                db.commit()
+                db.refresh(user)
+            return user 
+        except Exception as e:
+            print(f"Error creating user: {e}")
+            return None
+
+        
     def update_user(self, user_id: int, user_data: UserUpdateModel) -> Optional[User]:
         """Update an existing user."""
-        with self.get_session() as db:
-            user = db.query(User).filter(User.id == user_id).first()
-            if not user:
-                return None
-            for key, value in user_data.model_dump(exclude_unset=True).items():
-                if hasattr(user, key):
-                    setattr(user, key, value)
-            db.commit()
-            db.refresh(user)
-        return user
+        try:
+            with self.get_session() as db:
+                user = db.query(User).filter(User.id == user_id).first()
+                if not user:
+                    return None
+                for key, value in user_data.model_dump(exclude_unset=True).items():
+                    if hasattr(user, key):
+                        setattr(user, key, value)
+                db.commit()
+                db.refresh(user)
+            return user
+        except Exception as e:
+            print(f"Error updating user {user_id}: {e}")
+            return None
     
     def delete_user(self, user_id: int) -> bool:
         """Delete a user by ID."""
-        with self.get_session() as db:
-            user = db.query(User).filter(User.id == user_id).first()
-            if not user:
-                return False
-            db.delete(user)
-            db.commit()
-        return True
+        try:
+            with self.get_session() as db:
+                user = db.query(User).filter(User.id == user_id).first()
+                if not user:
+                    return False
+                db.delete(user)
+                db.commit()
+            return True
+        except Exception as e:
+            print(f"Error deleting user {user_id}: {e}")
+            return False
     
     def list_users(self) -> List[User]:
         """List all users."""
-        with self.get_session() as db:
-            return db.query(User).all()
+        try:
+            with self.get_session() as db:
+                return db.query(User).all()
+        except Exception as e:
+            print(f"Error listing users: {e}")
+            return []
 
     

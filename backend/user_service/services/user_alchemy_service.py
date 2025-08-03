@@ -4,6 +4,7 @@ from backend.user_service.repos.abstract_alchemy_user_repo import AbstractAlchem
 from backend.user_service.models.user_model import UserModel
 from backend.database.models.user_model import User
 from backend.user_service.utils.model_to_model_mapper import ModelToModelMapper
+from backend.user_service.errors_exceptions.exceptions import UserNotFoundError
 from typing import List, Optional
 
 class UserAlchemyService:
@@ -11,11 +12,11 @@ class UserAlchemyService:
         self.repo = repo
         self.mapper = ModelToModelMapper()
 
-    def get_user_by_id(self, user_id: int) -> Optional[UserModel]:
+    def get_user_by_id(self, user_id: int) -> UserModel:
         user = self.repo.get_user(user_id)
-        if user:
-            return self.mapper.db_model_to_user_output(user)
-        return None
+        if not user:
+            raise UserNotFoundError(f"User with id {user_id} not found")
+        return self.mapper.db_model_to_user_output(user)
 
     def get_all_users(self) -> List[UserModel]:
         users = self.repo.list_users()
@@ -28,11 +29,13 @@ class UserAlchemyService:
             return self.mapper.db_model_to_user_output(created_user)
         return None
 
-    def update_user(self, user_id: int, user_data: UserUpdateModel) -> Optional[UserModel]:
+    def update_user(self, user_id: int, user_data: UserUpdateModel) -> UserModel:
         updated_user = self.repo.update_user(user_id, user_data)
-        if updated_user:
-            return self.mapper.db_model_to_user_output(updated_user)
-        return None
+        if not updated_user:
+            raise UserNotFoundError(f"User with id {user_id} not found")
+        return self.mapper.db_model_to_user_output(updated_user)
 
     def remove_user(self, user_id: int) -> bool:
+        if not self.repo.get_user(user_id):
+            raise UserNotFoundError(f"User with id {user_id} not found")
         return self.repo.delete_user(user_id)
