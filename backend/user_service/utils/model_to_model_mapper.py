@@ -2,6 +2,7 @@ from backend.user_service.models.user_update_model import UserUpdateModel
 from backend.user_service.models.user_input_model import UserInputModel
 from backend.user_service.models.user_model import UserModel
 from backend.database.models.user_model import User
+from backend.user_service.utils.security import password_manager
 
 class ModelToModelMapper:
     @staticmethod
@@ -13,7 +14,7 @@ class ModelToModelMapper:
         return User(
             username=user_input.username,
             email=user_input.email,
-            password_hash=user_input.password_hash,
+            password_hash= password_manager.hash_password(user_input.password),
             first_name=user_input.first_name,
             last_name=user_input.last_name,
             created_at=user_input.created_at
