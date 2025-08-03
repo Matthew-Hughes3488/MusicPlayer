@@ -9,7 +9,8 @@ class UserAlchemyRepo(AbstractAlchemyUserRepo):
     @contextmanager
     def get_session(self):
         """Context manager to handle database sessions."""
-        db = DatabaseConnector.get_session()
+        connector = DatabaseConnector()
+        db = connector.get_session()
         try:
             yield db
         finally:
