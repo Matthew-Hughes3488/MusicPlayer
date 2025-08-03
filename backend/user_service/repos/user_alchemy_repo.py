@@ -77,5 +77,14 @@ class UserAlchemyRepo(AbstractAlchemyUserRepo):
         except Exception as e:
             print(f"Error listing users: {e}")
             return []
+    
+    def get_user_by_email(self, email: str) -> Optional[User]:
+        """Retrieve a user by email."""
+        try:
+            with self.get_session() as db:
+                return db.query(User).filter(User.email == email).first()
+        except Exception as e:
+            print(f"Error retrieving user by email {email}: {e}")
+            return None
 
     

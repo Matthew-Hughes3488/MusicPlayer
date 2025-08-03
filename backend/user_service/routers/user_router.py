@@ -20,6 +20,15 @@ def get_user_by_id(user_id: int):
         return user_service.get_user_by_id(user_id)
     except Exception as e:
         raise HTTPException(status_code=404, detail=str(e))
+    
+@router.get("/users/email/{email}", response_model=UserModel)
+def get_user_by_email(email: str):
+    try:
+        return user_service.get_user_by_email(email)
+    except UserNotFoundError as e:
+        raise HTTPException(status_code=404, detail=str(e))
+    except Exception as e:
+        raise HTTPException(status_code=400, detail=str(e))
 
 @router.post("/users", response_model=UserModel)
 def create_user(user_input: UserInputModel):

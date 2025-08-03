@@ -26,3 +26,8 @@ class AbstractAlchemyUserService(ABC):
     @abstractmethod
     def list_users(self) -> List[UserModel]:
         pass
+
+    @abstractmethod
+    def get_user_by_email(self, email: str) -> Optional[UserModel]:
+        """Retrieve a user by email."""
+        pass

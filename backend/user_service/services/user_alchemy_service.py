@@ -42,3 +42,9 @@ class UserAlchemyService:
         if not self.repo.get_user(user_id):
             raise UserNotFoundError(f"User with id {user_id} not found")
         return self.repo.delete_user(user_id)
+    
+    def get_user_by_email(self, email: str) -> Optional[UserModel]:
+        user = self.repo.get_user_by_email(email)
+        if not user:
+            raise UserNotFoundError(f"User with email {email} not found")
+        return self.mapper.db_model_to_user_output(user)
