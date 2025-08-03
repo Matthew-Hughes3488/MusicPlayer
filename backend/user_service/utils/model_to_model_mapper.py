@@ -8,13 +8,13 @@ class ModelToModelMapper:
     @staticmethod
     def user_input_to_db_model(user_input: UserInputModel) -> User:
         """Convert UserInputModel to User database model."""
-        if not all ([user_input.username, user_input.email, user_input.password_hash, user_input.first_name]):
+        if not all([user_input.username, user_input.email, user_input.password, user_input.first_name]):
             raise ValueError("Required fields are missing in UserInputModel")
         
         return User(
             username=user_input.username,
             email=user_input.email,
-            password_hash= password_manager.hash_password(user_input.password),
+            password_hash=password_manager.hash_password(user_input.password),
             first_name=user_input.first_name,
             last_name=user_input.last_name,
             created_at=user_input.created_at
