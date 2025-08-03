@@ -1,4 +1,6 @@
-export const dummyPlaylists = [
+import type { Playlist } from '../types/index.js';
+
+export const dummyPlaylists: Playlist[] = [
   {
     id: 1,
     name: "My Favorites",

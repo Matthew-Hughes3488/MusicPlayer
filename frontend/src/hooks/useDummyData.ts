@@ -1,48 +1,49 @@
 import { dummyTracks } from '../data/dummyTracks.js';
 import { dummyPlaylists } from '../data/dummyPlaylists.js';
 import { dummyUser } from '../data/dummyUser.js';
+import type { Track, Playlist, User } from '../types/index.js';
 
 export const useDummyData = () => {
-  const getTracks = () => {
+  const getTracks = (): Promise<Track[]> => {
     return new Promise((resolve) => {
       setTimeout(() => resolve(dummyTracks), 500);
     });
   };
 
-  const getPlaylists = () => {
+  const getPlaylists = (): Promise<Playlist[]> => {
     return new Promise((resolve) => {
       setTimeout(() => resolve(dummyPlaylists), 300);
     });
   };
 
-  const getUser = () => {
+  const getUser = (): Promise<User> => {
     return new Promise((resolve) => {
       setTimeout(() => resolve(dummyUser), 200);
     });
   };
 
-  const getTrackById = (id) => {
+  const getTrackById = (id: number): Promise<Track | undefined> => {
     return new Promise((resolve) => {
       const track = dummyTracks.find(track => track.id === id);
       setTimeout(() => resolve(track), 100);
     });
   };
 
-  const getPlaylistById = (id) => {
+  const getPlaylistById = (id: number): Promise<Playlist | undefined> => {
     return new Promise((resolve) => {
       const playlist = dummyPlaylists.find(playlist => playlist.id === id);
       setTimeout(() => resolve(playlist), 100);
     });
   };
 
-  const getTracksByIds = (ids) => {
+  const getTracksByIds = (ids: number[]): Promise<Track[]> => {
     return new Promise((resolve) => {
       const tracks = dummyTracks.filter(track => ids.includes(track.id));
       setTimeout(() => resolve(tracks), 200);
     });
   };
 
-  const searchTracks = (query) => {
+  const searchTracks = (query: string): Promise<Track[]> => {
     return new Promise((resolve) => {
       const filteredTracks = dummyTracks.filter(track => 
         track.title.toLowerCase().includes(query.toLowerCase()) ||
@@ -53,23 +54,23 @@ export const useDummyData = () => {
     });
   };
 
-  const addToPlaylist = (playlistId, trackId) => {
+  const addToPlaylist = (playlistId: number, trackId: number): Promise<{ success: boolean }> => {
     return new Promise((resolve) => {
       console.log(`Adding track ${trackId} to playlist ${playlistId}`);
       setTimeout(() => resolve({ success: true }), 200);
     });
   };
 
-  const removeFromPlaylist = (playlistId, trackId) => {
+  const removeFromPlaylist = (playlistId: number, trackId: number): Promise<{ success: boolean }> => {
     return new Promise((resolve) => {
       console.log(`Removing track ${trackId} from playlist ${playlistId}`);
       setTimeout(() => resolve({ success: true }), 200);
     });
   };
 
-  const createPlaylist = (name, description) => {
+  const createPlaylist = (name: string, description: string): Promise<Playlist> => {
     return new Promise((resolve) => {
-      const newPlaylist = {
+      const newPlaylist: Playlist = {
         id: Date.now(),
         name,
         description,

@@ -1,9 +1,24 @@
-import { useState, useContext, createContext, useEffect } from 'react';
+import React, { useState, useContext, createContext, useEffect } from 'react';
+import type { ReactNode } from 'react';
 import { dummyUser } from '../data/dummyUser.js';
+import type { User, AuthResult } from '../types/index.js';
 
-const AuthContext = createContext();
+interface AuthContextType {
+  user: User | null;
+  isAuthenticated: boolean;
+  isLoading: boolean;
+  token: string | null;
+  login: (credentials: { email: string; password: string }) => Promise<AuthResult>;
+  logout: () => void;
+  register: (userData: any) => Promise<AuthResult>;
+  updateUserPreferences: (preferences: Partial<User['preferences']>) => void;
+  refreshToken: () => Promise<{ success: boolean; token?: string; error?: string }>;
+  forgotPassword: (email: string) => Promise<{ success: boolean; message?: string; error?: string }>;
+}
 
-export const useAuth = () => {
+const AuthContext = createContext<AuthContextType | undefined>(undefined);
+
+export const useAuth = (): AuthContextType => {
   const context = useContext(AuthContext);
   if (!context) {
     throw new Error('useAuth must be used within an AuthProvider');
@@ -11,11 +26,15 @@ export const useAuth = () => {
   return context;
 };
 
-export const AuthProvider = ({ children }) => {
-  const [user, setUser] = useState(null);
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const [isLoading, setIsLoading] = useState(true);
-  const [token, setToken] = useState(null);
+interface AuthProviderProps {
+  children: ReactNode;
+}
+
+export const AuthProvider = ({ children }: AuthProviderProps) => {
+  const [user, setUser] = useState<User | null>(null);
+  const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
+  const [isLoading, setIsLoading] = useState<boolean>(true);
+  const [token, setToken] = useState<string | null>(null);
 
   // Check for existing auth on mount
   useEffect(() => {
@@ -37,7 +56,7 @@ export const AuthProvider = ({ children }) => {
     setIsLoading(false);
   }, []);
 
-  const login = async (credentials) => {
+  const login = async (credentials: { email: string; password: string }): Promise<AuthResult> => {
     setIsLoading(true);
     
     try {
@@ -60,7 +79,7 @@ export const AuthProvider = ({ children }) => {
       } else {
         throw new Error('Invalid credentials');
       }
-    } catch (error) {
+    } catch (error: any) {
       console.error('Login error:', error);
       return { success: false, error: error.message };
     } finally {
@@ -76,8 +95,10 @@ export const AuthProvider = ({ children }) => {
     localStorage.removeItem('userData');
   };
 
-  const updateUserPreferences = (preferences) => {
-    const updatedUser = {
+  const updateUserPreferences = (preferences: Partial<User['preferences']>) => {
+    if (!user) return;
+    
+    const updatedUser: User = {
       ...user,
       preferences: {
         ...user.preferences,
@@ -89,7 +110,7 @@ export const AuthProvider = ({ children }) => {
     localStorage.setItem('userData', JSON.stringify(updatedUser));
   };
 
-  const register = async (userData) => {
+  const register = async (userData: any): Promise<AuthResult> => {
     setIsLoading(true);
     
     try {
@@ -97,7 +118,7 @@ export const AuthProvider = ({ children }) => {
       await new Promise(resolve => setTimeout(resolve, 1500));
       
       // Dummy registration - in real app, this would call the backend
-      const newUser = {
+      const newUser: User = {
         ...dummyUser,
         username: userData.username,
         email: userData.email,
@@ -118,7 +139,7 @@ export const AuthProvider = ({ children }) => {
       localStorage.setItem('userData', JSON.stringify(newUser));
       
       return { success: true, user: newUser, token: dummyToken };
-    } catch (error) {
+    } catch (error: any) {
       console.error('Registration error:', error);
       return { success: false, error: error.message };
     } finally {
@@ -134,19 +155,19 @@ export const AuthProvider = ({ children }) => {
       setToken(newToken);
       localStorage.setItem('authToken', newToken);
       return { success: true, token: newToken };
-    } catch (error) {
+    } catch (error: any) {
       console.error('Token refresh error:', error);
       logout();
       return { success: false, error: error.message };
     }
   };
 
-  const forgotPassword = async (email) => {
+  const forgotPassword = async (email: string) => {
     try {
       await new Promise(resolve => setTimeout(resolve, 1000));
       console.log('Password reset email sent to:', email);
       return { success: true, message: 'Password reset email sent' };
-    } catch (error) {
+    } catch (error: any) {
       console.error('Forgot password error:', error);
       return { success: false, error: error.message };
     }

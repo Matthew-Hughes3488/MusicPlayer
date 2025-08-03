@@ -1,21 +1,22 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
 import { formatTime, getNextTrack, getPreviousTrack, shuffleArray } from '../utils/audioUtils.js';
+import type { Track } from '../types/index.js';
 
 export const useAudioPlayer = () => {
-  const audioRef = useRef(null);
-  const [currentTrack, setCurrentTrack] = useState(null);
-  const [playlist, setPlaylist] = useState([]);
-  const [currentIndex, setCurrentIndex] = useState(0);
-  const [isPlaying, setIsPlaying] = useState(false);
-  const [volume, setVolume] = useState(0.7);
-  const [currentTime, setCurrentTime] = useState(0);
-  const [duration, setDuration] = useState(0);
-  const [isLoading, setIsLoading] = useState(false);
-  const [isShuffled, setIsShuffled] = useState(false);
-  const [repeatMode, setRepeatMode] = useState('off'); // 'off', 'one', 'all'
-  const [shuffledIndices, setShuffledIndices] = useState([]);
-  const [isMuted, setIsMuted] = useState(false);
-  const [previousVolume, setPreviousVolume] = useState(0.7);
+  const audioRef = useRef<HTMLAudioElement | null>(null);
+  const [currentTrack, setCurrentTrack] = useState<Track | null>(null);
+  const [playlist, setPlaylist] = useState<Track[]>([]);
+  const [currentIndex, setCurrentIndex] = useState<number>(0);
+  const [isPlaying, setIsPlaying] = useState<boolean>(false);
+  const [volume, setVolume] = useState<number>(0.7);
+  const [currentTime, setCurrentTime] = useState<number>(0);
+  const [duration, setDuration] = useState<number>(0);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [isShuffled, setIsShuffled] = useState<boolean>(false);
+  const [repeatMode, setRepeatMode] = useState<'off' | 'one' | 'all'>('off');
+  const [shuffledIndices, setShuffledIndices] = useState<number[]>([]);
+  const [isMuted, setIsMuted] = useState<boolean>(false);
+  const [previousVolume, setPreviousVolume] = useState<number>(0.7);
 
   // Initialize audio element
   useEffect(() => {
@@ -86,7 +87,7 @@ export const useAudioPlayer = () => {
     }
   }, [volume, isMuted]);
 
-  const loadTrack = useCallback((track) => {
+  const loadTrack = useCallback((track: Track) => {
     if (!track || !audioRef.current) return;
 
     audioRef.current.src = track.url;
@@ -122,14 +123,14 @@ export const useAudioPlayer = () => {
     }
   }, [isPlaying, play, pause]);
 
-  const seek = useCallback((time) => {
+  const seek = useCallback((time: number) => {
     if (audioRef.current) {
       audioRef.current.currentTime = time;
       setCurrentTime(time);
     }
   }, []);
 
-  const setPlaylist = useCallback((tracks, startIndex = 0) => {
+  const setPlaylistTracks = useCallback((tracks: Track[], startIndex: number = 0) => {
     setPlaylist(tracks);
     setCurrentIndex(startIndex);
     
@@ -144,7 +145,7 @@ export const useAudioPlayer = () => {
     }
   }, [loadTrack]);
 
-  const playTrack = useCallback((track, newPlaylist = null, index = 0) => {
+  const playTrack = useCallback((track: Track, newPlaylist?: Track[], index: number = 0) => {
     if (newPlaylist) {
       setPlaylist(newPlaylist);
       setCurrentIndex(index);
@@ -204,7 +205,7 @@ export const useAudioPlayer = () => {
     }
   }, [isMuted, volume, previousVolume]);
 
-  const changeVolume = useCallback((newVolume) => {
+  const changeVolume = useCallback((newVolume: number) => {
     setVolume(newVolume);
     if (newVolume > 0 && isMuted) {
       setIsMuted(false);
@@ -235,7 +236,7 @@ export const useAudioPlayer = () => {
     pause,
     togglePlayPause,
     seek,
-    setPlaylist,
+    setPlaylist: setPlaylistTracks,
     playTrack,
     playNext,
     playPrevious,

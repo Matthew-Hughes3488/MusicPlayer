@@ -1,4 +1,6 @@
-export const dummyTracks = [
+import type { Track } from '../types/index.js';
+
+export const dummyTracks: Track[] = [
   {
     id: 1,
     title: "Bohemian Rhapsody",

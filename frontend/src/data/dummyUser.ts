@@ -1,4 +1,6 @@
-export const dummyUser = {
+import type { User } from '../types/index.js';
+
+export const dummyUser: User = {
   id: 1,
   username: "musiclover123",
   email: "user@example.com",
