@@ -54,7 +54,7 @@ class AuthService:
     def generate_jwt_claim(self, user: UserModel) -> JWTPayload:
         """Generate JWT claims from the user model."""
         return JWTPayload(
-            sub=user.id,
+            sub=str(user.id),
             name=user.username,
             email=user.email,
             exp=int(time.time()) + 3600,  # Token valid for 1 hour

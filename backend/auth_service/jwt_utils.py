@@ -14,7 +14,9 @@ def create_access_token(payload: JWTPayload) -> str:
     """
     Creates a JWT token from the payload.
     """
-    return jwt.encode(payload, SECRET_KEY, algorithm=ALGORITHM)
+    # Convert Pydantic model to dictionary for JWT encoding
+    payload_dict = payload.model_dump()
+    return jwt.encode(payload_dict, SECRET_KEY, algorithm=ALGORITHM)
 
 def verify_access_token(token: str) -> dict:
     """
