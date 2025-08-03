@@ -1,7 +1,7 @@
 import { useState, useEffect, useCallback, useMemo } from 'react';
 import { dummyTracks, searchTracks as searchTracksUtil } from '../data/dummyTracks.js';
 import { dummyPlaylists, getPlaylistById, createPlaylist as createPlaylistUtil } from '../data/dummyPlaylists.js';
-import { dummyUser, mockUserPreferences } from '../data/dummyUser.js';
+import { dummyUser, mockUserPreferences } from '../data/dummyUser.jsx';
 
 // Custom hook for managing dummy data and simulating API calls
 export const useDummyData = () => {

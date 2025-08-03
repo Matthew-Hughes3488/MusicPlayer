@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { useAuth } from '../../hooks/useAuth.js';
+import { useAuth } from '../../hooks/useAuth.jsx';
 import { Eye, EyeOff, Music, Lock, User } from 'lucide-react';
 
 export const LoginForm = ({ onSuccess }) => {

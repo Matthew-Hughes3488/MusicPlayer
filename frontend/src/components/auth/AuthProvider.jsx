@@ -1,4 +1,4 @@
-import { useAuth } from '../../hooks/useAuth.js';
+import { useAuth } from '../../hooks/useAuth.jsx';
 
 // Higher-order component for protecting routes that require authentication
 export const ProtectedRoute = ({ children }) => {
@@ -36,7 +36,7 @@ const LoginComponent = () => {
 };
 
 // Re-export AuthProvider from useAuth hook for convenience
-export { AuthProvider } from '../../hooks/useAuth.js';
+export { AuthProvider } from '../../hooks/useAuth.jsx';
 
 // Component to handle logout
 export const LogoutButton = ({ className = "btn-ghost" }) => {

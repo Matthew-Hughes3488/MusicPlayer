@@ -173,10 +173,12 @@ export class AudioManager {
     this.volume = Math.max(0, Math.min(1, volume));
     if (this.audio) {
       this.audio.volume = this.volume;
-    }
-    if (this.volume > 0) {
-      this.isMuted = false;
-      this.audio.muted = false;
+      if (this.volume > 0) {
+        this.isMuted = false;
+        if (this.audio.muted !== undefined) {
+          this.audio.muted = false;
+        }
+      }
     }
     this.notifyListeners('volumechange');
   }
@@ -193,7 +195,9 @@ export class AudioManager {
     }
     
     if (this.audio) {
-      this.audio.muted = this.isMuted;
+      if (this.audio.muted !== undefined) {
+        this.audio.muted = this.isMuted;
+      }
       this.audio.volume = this.volume;
     }
     

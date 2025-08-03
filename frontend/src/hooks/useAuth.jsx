@@ -1,5 +1,5 @@
 import { useState, useEffect, useContext, createContext } from 'react';
-import { dummyUser, mockAuth } from '../data/dummyUser.js';
+import { dummyUser, mockAuth } from '../data/dummyUser.jsx';
 
 // Create auth context
 const AuthContext = createContext(null);
