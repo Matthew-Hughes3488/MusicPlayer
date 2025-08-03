@@ -10,6 +10,8 @@ A modern, responsive React music player web application with Tailwind CSS that i
 - **Authentication System** - Mock login with JWT token simulation
 - **Responsive Layout** - Modern Spotify-like interface with dark theme
 - **Music Library** - Browse 30+ dummy tracks with metadata
+- **Explore Page** - **NEW!** Comprehensive track listing with search and filtering
+- **Navigation** - Route-based navigation between Home and Explore pages
 - **Playlist Management** - Create and manage playlists
 - **Audio Player Controls** - Play/pause, skip, volume, progress (UI complete)
 - **Search & Filter** - Search tracks by title, artist, album, or genre
@@ -40,6 +42,9 @@ src/
 │   │   ├── TrackItem.jsx          # Individual track component
 │   │   ├── NowPlaying.jsx         # Currently playing track display
 │   │   └── VolumeControl.jsx      # Volume control component
+│   ├── pages/                     # NEW! Page components for routing
+│   │   ├── Home.jsx               # Dashboard/home page
+│   │   └── Explore.jsx            # Track exploration page with filters
 │   └── playlist/
 │       ├── PlaylistView.jsx       # Playlist viewing (TODO)
 │       └── PlaylistCreator.jsx    # Playlist creation (TODO)
@@ -72,33 +77,49 @@ backend/
 ## 🚀 Getting Started
 
 ### Prerequisites
-- Node.js 18+
-- npm or yarn
+- Node.js 18+ installed on your system
+- npm package manager (comes with Node.js)
 
-### Development Setup
+### Local Development Setup
 
 1. **Clone the repository**
    ```bash
-   git clone <repository-url>
-   cd MusicPlayer/frontend
+   git clone https://github.com/Matthew-Hughes3488/MusicPlayer.git
+   cd MusicPlayer
    ```
 
-2. **Install dependencies**
+2. **Navigate to the frontend directory**
+   ```bash
+   cd frontend
+   ```
+
+3. **Install dependencies**
    ```bash
    npm install
    ```
 
-3. **Start development server**
+4. **Start the development server**
    ```bash
    npm run dev
    ```
 
-4. **Open http://localhost:5173**
+5. **Open your browser**
+   - Navigate to `http://localhost:5173`
+   - The application will automatically reload when you make changes
 
-### Demo Login
-- **Email**: Any valid email (e.g., `matthew@example.com`)
-- **Password**: Any password (e.g., `demo123`)
-- Click "Fill demo credentials" for quick login
+### Quick Start Demo
+1. On the login page, click "Fill demo credentials" 
+2. Click "Sign in" to access the application
+3. Navigate between **Home** and **Explore** pages using the sidebar
+4. Use the **Explore** page to browse all tracks with search and filtering
+
+### Available Scripts
+```bash
+npm run dev          # Start development server (http://localhost:5173)
+npm run build        # Build for production
+npm run preview      # Preview production build locally
+npm run lint         # Run ESLint for code quality
+```
 
 ## 🎨 Design System
 
@@ -230,9 +251,11 @@ npm run lint         # Run ESLint
 
 ### Phase 1: Core Features (Complete)
 - [x] Authentication system
-- [x] Layout components
+- [x] Layout components  
 - [x] Music player interface
 - [x] Dummy data integration
+- [x] **Explore page with track listing**
+- [x] **React Router navigation setup**
 
 ### Phase 2: Enhanced Features
 - [ ] Playlist management UI
