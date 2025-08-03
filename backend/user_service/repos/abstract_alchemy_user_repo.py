@@ -6,7 +6,7 @@ from backend.user_service.models.user_update_model import UserUpdateModel
 class AbstractAlchemyUserRepo(ABC):
 
     @abstractmethod
-    def get_user(self, user_id: str) -> Optional[User]:
+    def get_user(self, user_id: int) -> Optional[User]:
         pass
 
     @abstractmethod
@@ -14,7 +14,15 @@ class AbstractAlchemyUserRepo(ABC):
         pass
 
     @abstractmethod
-    def update_user(self, user_id: str, user_data: UserUpdateModel) -> Optional[User]:
+    def update_user(self, user_id: int, user_data: UserUpdateModel) -> Optional[User]:
+        pass
+
+    @abstractmethod
+    def delete_user(self, user_id: int) -> bool:
+        pass
+
+    @abstractmethod
+    def list_users(self) -> List[User]:
         pass
 
     @abstractmethod

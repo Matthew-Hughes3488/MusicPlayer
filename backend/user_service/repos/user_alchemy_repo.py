@@ -16,7 +16,7 @@ class UserAlchemyRepo(AbstractAlchemyUserRepo):
         finally:
             db.close()
 
-    def get_user(self, user_id) -> Optional[User]:
+    def get_user(self, user_id: int) -> Optional[User]:
         """Retrieve a user by ID."""
         with self.get_session() as db:
             return db.query(User).filter(User.id == user_id).first()
@@ -29,7 +29,7 @@ class UserAlchemyRepo(AbstractAlchemyUserRepo):
             db.refresh(user)
         return user
     
-    def update_user(self, user_id: str, user_data: UserUpdateModel) -> Optional[User]:
+    def update_user(self, user_id: int, user_data: UserUpdateModel) -> Optional[User]:
         """Update an existing user."""
         with self.get_session() as db:
             user = db.query(User).filter(User.id == user_id).first()
@@ -42,7 +42,7 @@ class UserAlchemyRepo(AbstractAlchemyUserRepo):
             db.refresh(user)
         return user
     
-    def delete_user(self, user_id: str) -> bool:
+    def delete_user(self, user_id: int) -> bool:
         """Delete a user by ID."""
         with self.get_session() as db:
             user = db.query(User).filter(User.id == user_id).first()
