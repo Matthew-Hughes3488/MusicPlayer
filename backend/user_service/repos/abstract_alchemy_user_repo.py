@@ -10,7 +10,7 @@ class AbstractAlchemyUserRepo(ABC):
         pass
 
     @abstractmethod
-    def create_user(self, user: User) -> User:
+    def create_user(self, user: User) -> Optional[User]:
         pass
 
     @abstractmethod
