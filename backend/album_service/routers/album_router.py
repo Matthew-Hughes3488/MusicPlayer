@@ -11,14 +11,16 @@ from backend.album_service.models.song import Song
 router = APIRouter()
 album_service = AlbumAlchemyService(album_repository=AlbumAlchemyRepository())
 
-def authorize_request(request: Request):
+def authorize_request(request: Request, required_role: str = None):
     auth_header = request.headers.get("Authorization")
     if not auth_header or not auth_header.startswith("Bearer "):
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Missing or invalid Authorization header")
     token = auth_header.split(" ")[1]
     try:
         payload = verify_access_token(token)
-        return payload  # You can return user info from the payload
+        if required_role and payload.get("role") != required_role:
+            raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Insufficient permissions")
+        return payload
     except Exception as e:
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Invalid token")
 
@@ -43,7 +45,7 @@ async def get_album_by_id(album_id: int, current_user=Depends(authorize_request)
         raise HTTPException(status_code=404, detail=str(e))
     
 @router.post("/albums", response_model=Album)
-async def create_album(album_input: AlbumInput, current_user=Depends(authorize_request)):
+async def create_album(album_input: AlbumInput, current_user=Depends(authorize_request("admin"))):
     """
     Create a new album.
     :param album_input: The album input object to create.
@@ -57,7 +59,7 @@ async def create_album(album_input: AlbumInput, current_user=Depends(authorize_r
         raise HTTPException(status_code=400, detail=str(e))
     
 @router.put("/albums/{album_id}", response_model=Album)
-async def update_album(album_id: int, album_input: AlbumUpdateInput, current_user=Depends(authorize_request)):
+async def update_album(album_id: int, album_input: AlbumUpdateInput, current_user=Depends(authorize_request("admin"))):
     """
     Update an existing album.
     :param album_id: The ID of the album to update.
@@ -72,7 +74,7 @@ async def update_album(album_id: int, album_input: AlbumUpdateInput, current_use
         raise HTTPException(status_code=400, detail=str(e))
     
 @router.delete("/albums/{album_id}")
-async def delete_album(album_id: int, current_user=Depends(authorize_request)):
+async def delete_album(album_id: int, current_user=Depends(authorize_request("admin"))):
     """
     Delete an album by its ID.
     :param album_id: The ID of the album to delete.
