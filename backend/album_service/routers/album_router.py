@@ -1,17 +1,18 @@
-from fastapi import APIRouter, HTTPException, Depends
+from fastapi import APIRouter, HTTPException
 from typing import List
 from backend.album_service.models.album import Album
 from backend.album_service.models.album_input import AlbumInput
 from backend.album_service.models.album_update_input import AlbumUpdateInput
 from backend.album_service.repos.album_alchemy_repo import AlbumAlchemyRepository
 from backend.album_service.services.album_alchemy_service import AlbumAlchemyService
+from backend.album_service.utils.auth_helper import auth_helper
 from backend.album_service.models.song import Song
 
 router = APIRouter()
 album_service = AlbumAlchemyService(album_repository=AlbumAlchemyRepository())
 
 @router.get("/albums", response_model=List[Album])
-async def get_all_albums():
+async def get_all_albums(current_user=auth_helper.require_auth()):
     """
     Get all albums.
     :return: A list of all album objects.
@@ -19,7 +20,7 @@ async def get_all_albums():
     return album_service.get_all_albums()
 
 @router.get("/albums/{album_id}", response_model=Album)
-async def get_album_by_id(album_id: int):
+async def get_album_by_id(album_id: int, current_user=auth_helper.require_auth()):
     """
     Get an album by its ID.
     :param album_id: The ID of the album to retrieve.
@@ -31,7 +32,7 @@ async def get_album_by_id(album_id: int):
         raise HTTPException(status_code=404, detail=str(e))
     
 @router.post("/albums", response_model=Album)
-async def create_album(album_input: AlbumInput):
+async def create_album(album_input: AlbumInput, current_user=auth_helper.require_role("admin")):
     """
     Create a new album.
     :param album_input: The album input object to create.
@@ -45,7 +46,7 @@ async def create_album(album_input: AlbumInput):
         raise HTTPException(status_code=400, detail=str(e))
     
 @router.put("/albums/{album_id}", response_model=Album)
-async def update_album(album_id: int, album_input: AlbumUpdateInput):
+async def update_album(album_id: int, album_input: AlbumUpdateInput, current_user=auth_helper.require_role("admin")):
     """
     Update an existing album.
     :param album_id: The ID of the album to update.
@@ -60,7 +61,7 @@ async def update_album(album_id: int, album_input: AlbumUpdateInput):
         raise HTTPException(status_code=400, detail=str(e))
     
 @router.delete("/albums/{album_id}")
-async def delete_album(album_id: int):
+async def delete_album(album_id: int, current_user=auth_helper.require_role("admin")):
     """
     Delete an album by its ID.
     :param album_id: The ID of the album to delete.
@@ -73,7 +74,7 @@ async def delete_album(album_id: int):
         raise HTTPException(status_code=404, detail=str(e))
 
 @router.get("/albums/{album_id}/songs", response_model=List[Song])
-async def get_album_songs(album_id: int):
+async def get_album_songs(album_id: int, current_user=auth_helper.require_auth()):
     """
     Get all songs in an album.
     :param album_id: The ID of the album to retrieve songs from.
