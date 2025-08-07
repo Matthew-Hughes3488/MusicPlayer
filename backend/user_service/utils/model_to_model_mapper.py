@@ -1,5 +1,6 @@
 from backend.user_service.models.user_update_model import UserUpdateModel
 from backend.user_service.models.user_input_model import UserInputModel
+from backend.user_service.models.auth_info_model import AuthInfoModel
 from backend.user_service.models.user_model import UserModel
 from backend.database.models.user_model import User
 from backend.user_service.utils.security import password_manager
@@ -32,5 +33,14 @@ class ModelToModelMapper:
             last_name=db_model.last_name,
             created_at=db_model.created_at,
             updated_at=db_model.updated_at
+        )
+    
+    @staticmethod
+    def db_model_to_auth_info(db_model: User) -> AuthInfoModel:
+        """Convert User database model to AuthInfoModel."""
+        return AuthInfoModel(
+            user_id=db_model.id,
+            password_hash=db_model.password_hash,
+            role=db_model.role if hasattr(db_model, 'role') else "user"
         )
 

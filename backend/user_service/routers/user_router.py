@@ -3,6 +3,7 @@ from typing import List
 from backend.user_service.models.user_model import UserModel
 from backend.user_service.models.user_input_model import UserInputModel
 from backend.user_service.models.user_update_model import UserUpdateModel
+from backend.user_service.models.auth_info_model import AuthInfoModel
 from backend.user_service.services.user_alchemy_service import UserAlchemyService
 from backend.user_service.repos.user_alchemy_repo import UserAlchemyRepo
 from backend.user_service.errors_exceptions.exceptions import UserNotFoundError
@@ -22,7 +23,7 @@ def get_user_by_id(user_id: int, current_user=auth_helper.require_auth()):
     except Exception as e:
         raise HTTPException(status_code=404, detail=str(e))
     
-@router.get("/users/email/{email}", response_model=UserModel)
+@router.get("/users/email/{email}", response_model=AuthInfoModel)
 def get_user_by_email(email: str):
     try:
         return user_service.get_user_by_email(email)

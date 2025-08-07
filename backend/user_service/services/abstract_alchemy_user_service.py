@@ -3,6 +3,7 @@ from typing import List, Optional
 from backend.database.models.user_model import User
 from backend.user_service.models.user_update_model import UserUpdateModel
 from backend.user_service.models.user_model import UserModel
+from backend.user_service.models.auth_info_model import AuthInfoModel
 from backend.user_service.repos.abstract_alchemy_user_repo import AbstractAlchemyUserRepo
 
 class AbstractAlchemyUserService(ABC):
@@ -28,6 +29,6 @@ class AbstractAlchemyUserService(ABC):
         pass
 
     @abstractmethod
-    def get_user_by_email(self, email: str) -> Optional[UserModel]:
+    def get_user_by_email(self, email: str) -> Optional[AuthInfoModel]:
         """Retrieve a user by email."""
         pass
