@@ -1,5 +1,5 @@
 from fastapi import Depends, Request, HTTPException
-from backend.auth_service.jwt_utils import verify_access_token
+from backend.album_service.utils.jwt_utils import verify_access_token
 
 class AuthHelper:
     def __init__(self, allowed_roles=None):
@@ -34,12 +34,3 @@ class AuthHelper:
         return Depends(dependency)
 
 auth_helper = AuthHelper()
-
-# Example endpoint usage:
-# @router.get("/albums")
-# async def get_albums(current_user=auth_helper.require_auth()):
-#     ...
-
-# @router.post("/albums")
-# async def create_album(album_input: AlbumInput, current_user=auth_helper.require_role("admin")):
-#     ...
