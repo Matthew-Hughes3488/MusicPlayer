@@ -1,12 +1,11 @@
 from backend.auth_service.security_utils import password_manager
-from backend.auth_service.model.user_model import UserModel
+from backend.auth_service.model.auth_info_model import AuthInfoModel
 from backend.auth_service.model.auth_models import LoginResponse, LoginRequest
 from backend.auth_service.jwt_utils import create_access_token
 from backend.auth_service.model.jwt_payload import JWTPayload
 from backend.auth_service.exceptions.auth_exceptions import AuthenticationError, UserNotFoundError
 import requests
 import time
-
 
 class AuthService:
     def __init__(self, user_service_url: str):
@@ -17,8 +16,8 @@ class AuthService:
         try:
             user = self.get_user_by_email(login_request.email)
             if user and self.verify_password(login_request.password, user['password_hash']):
-                token = self.generate_token(UserModel(**user))
-                return LoginResponse(auth_token=token, user_id=user['id'], username=user['username'], email=user['email'])
+                token = self.generate_token(AuthInfoModel(**user))
+                return LoginResponse(auth_token=token, user_id=user['user_id'])
             return None
         except Exception as e:
             print(f"Login failed: {e}")
@@ -42,7 +41,7 @@ class AuthService:
             print(f"Error fetching user by email: {e}")
             return None
 
-    def generate_token(self, user: UserModel) -> str:
+    def generate_token(self, user: AuthInfoModel) -> str:
         """Generate a JWT token for the user."""
         try:
             payload = self.generate_jwt_claim(user)
@@ -51,13 +50,11 @@ class AuthService:
             print(f"Error generating token: {e}")
             return None
 
-    def generate_jwt_claim(self, user: UserModel) -> JWTPayload:
+    def generate_jwt_claim(self, user: AuthInfoModel) -> JWTPayload:
         """Generate JWT claims from the user model."""
         return JWTPayload(
-            sub=str(user.id),
-            name=user.username,
-            email=user.email,
+            sub=str(user.user_id),
             exp=int(time.time()) + 3600,  # Token valid for 1 hour
             iat=int(time.time()),  # Issued at time
-            role="user"  # Default for now, can be extended later
+            role=user.role  # Default for now, can be extended later
         )

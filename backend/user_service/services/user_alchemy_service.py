@@ -1,5 +1,6 @@
 from backend.user_service.models.user_update_model import UserUpdateModel
 from backend.user_service.models.user_input_model import UserInputModel
+from backend.user_service.models.auth_info_model import AuthInfoModel
 from backend.user_service.repos.abstract_alchemy_user_repo import AbstractAlchemyUserRepo
 from backend.user_service.models.user_model import UserModel
 from backend.database.models.user_model import User
@@ -43,8 +44,8 @@ class UserAlchemyService:
             raise UserNotFoundError(f"User with id {user_id} not found")
         return self.repo.delete_user(user_id)
     
-    def get_user_by_email(self, email: str) -> Optional[UserModel]:
+    def get_user_by_email(self, email: str) -> Optional[AuthInfoModel]:
         user = self.repo.get_user_by_email(email)
         if not user:
             raise UserNotFoundError(f"User with email {email} not found")
-        return self.mapper.db_model_to_user_output(user)
+        return self.mapper.db_model_to_auth_info(user)
