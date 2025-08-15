@@ -146,10 +146,7 @@ def test_get_songs_by_album_id(test_client):
     """
     Test GET /albums/{album_id}/songs endpoint returns songs for an album.
     """
-    # DEBUG: First check what albums exist
-    all_albums = test_client.get("/albums").json()
-    print(f"Available albums: {[album['id'] for album in all_albums]}")
-    
+
     response = test_client.get("/albums/2/songs", headers=get_auth_headers())
     print(f"Response status: {response.status_code}")
     print(f"Response body: {response.text}")
