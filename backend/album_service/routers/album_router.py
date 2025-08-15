@@ -13,7 +13,7 @@ def get_album_service():
     return AlbumAlchemyService(album_repository=AlbumAlchemyRepository())
 
 @router.get("/albums", response_model=List[Album])
-async def get_all_albums(current_user=auth_helper.require_auth(), album_service = Depends(get_album_service)):
+async def get_all_albums(album_service = Depends(get_album_service)):
     """
     Get all albums.
     :return: A list of all album objects.

@@ -8,7 +8,6 @@ from backend.database.connector.connector import DatabaseConnector
 from backend.album_service.utils.model_to_model_functions import ModelConverter
 from typing import List, Optional
 from contextlib import contextmanager
-from sqlalchemy.orm import joinedload
 
 class AlbumAlchemyRepository(AbstractAlbumAlchemyRepository):
     def __init__(self, db_connector=None):
