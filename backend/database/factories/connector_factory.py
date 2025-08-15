@@ -1,14 +1,7 @@
 from backend.database.connector.connector import DatabaseConnector as ProdDatabaseConnector
 from backend.database.connector.test_connector import TestConnector
 
-
-class DatabaseConnectorFactory:
-    """
-    Factory class to create database connectors for different environments.
-    """
-    
-    @staticmethod
-    def create_connector(connector_type="prod", session_factory=None):
+def create_connector(connector_type="prod", session_factory=None):
         """
         Create a database connector based on the specified type.
         
