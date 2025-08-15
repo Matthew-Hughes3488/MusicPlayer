@@ -24,12 +24,13 @@ from backend.database.models.album_songs_model import album_songs
 from backend.database.connector.test_connector import TestConnector
 
 # Import mock data
-from backend.album_service.tests.mock_test_data import MOCK_ALBUMS, MOCK_SONGS
+from backend.album_service.tests.mock_test_data import *
 
 # Import JWT utilities for creating test tokens
 from backend.auth_service.model.jwt_payload import JWTPayload
 from backend.auth_service.jwt_utils import create_access_token
 
+from backend.album_service.errors_exceptions.exceptions import AlbumNotFoundError
 
 def create_test_token(user_id: str = "1", role: str = "user") -> str:
     """Create a simple test JWT token."""
@@ -112,6 +113,64 @@ def test_get_album_by_id(test_client):
     assert album["id"] == 1
     assert album["title"] == "The Dark Side of the Moon"
     assert album["artist"] == "Pink Floyd"
+
+def test_create_album(test_client):
+    new_album = get_album_for_create_test()
+    response = test_client.post("/albums", json=new_album, headers=get_auth_headers("admin"))
+    
+    assert response.status_code == 200
+    created_album = response.json()
+
+    assert created_album["id"] is not None
+    assert created_album["title"] == new_album["title"]
+    assert created_album["artist"] == new_album["artist"]
+    assert created_album["genre"] == new_album["genre"]
+    assert created_album["description"] == new_album["description"]
+    assert created_album["cover_image_url"] == new_album["cover_image_url"]
+
+def test_update_album(test_client):
+    updated_album = get_album_for_update_test()
+    response = test_client.put("/albums/1", json=updated_album, headers=get_auth_headers("admin"))
+    
+    assert response.status_code == 200
+    updated_response = response.json()
+    
+    assert updated_response["id"] == 1
+    assert updated_response["title"] == updated_album["title"]
+    assert updated_response["artist"] == updated_album["artist"]
+    assert updated_response["genre"] == updated_album["genre"]
+    assert updated_response["description"] == updated_album["description"]
+    assert updated_response["cover_image_url"] == updated_album["cover_image_url"]
+
+def test_get_songs_by_album_id(test_client):
+    """
+    Test GET /albums/{album_id}/songs endpoint returns songs for an album.
+    """
+    # DEBUG: First check what albums exist
+    all_albums = test_client.get("/albums").json()
+    print(f"Available albums: {[album['id'] for album in all_albums]}")
+    
+    response = test_client.get("/albums/2/songs", headers=get_auth_headers())
+    print(f"Response status: {response.status_code}")
+    print(f"Response body: {response.text}")
+    
+    assert response.status_code == 200
+    songs = response.json()
+    
+    assert len(songs) >= 1  
+
+def test_delete_album(test_client):
+    """
+    Test DELETE /albums/{album_id} endpoint deletes an album.
+    """
+    response = test_client.delete("/albums/1", headers=get_auth_headers("admin"))
+    
+    assert response.status_code == 200
+    assert response.json() == {"detail": "Album deleted successfully"}
+
+    response = test_client.get("/albums/1", headers=get_auth_headers())
+    assert response.status_code == 404
+
 
 def test_not_authorized_access(test_client):
     """
