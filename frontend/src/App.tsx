@@ -6,6 +6,7 @@ import LoginPage from './pages/LoginPage';
 import SearchPage from './pages/SearchPage';
 import PlayPage from './pages/PlayPage';
 import AdminPage from './pages/AdminPage';
+import DemoLoginPage from './pages/DemoLoginPage';
 import './App.css';
 
 function App() {
@@ -16,6 +17,7 @@ function App() {
           <Navigation />
           <Routes>
             <Route path="/login" element={<LoginPage />} />
+            <Route path="/demo-login" element={<DemoLoginPage />} />
             <Route 
               path="/search" 
               element={
@@ -40,7 +42,11 @@ function App() {
                 </ProtectedRoute>
               } 
             />
-            <Route path="/" element={<Navigate to="/search" replace />} />
+            {/* Demo routes for presentation */}
+            <Route path="/demo/search" element={<SearchPage />} />
+            <Route path="/demo/play" element={<PlayPage />} />
+            <Route path="/demo/admin" element={<AdminPage />} />
+            <Route path="/" element={<Navigate to="/demo-login" replace />} />
           </Routes>
         </div>
       </Router>
