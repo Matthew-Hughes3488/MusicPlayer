@@ -6,10 +6,9 @@ name: Backend Tests
 # When to run the pipeline
 on:
   push:
-    branches: [ main, develop ]  # Run on pushes to these branches
+    branches: ['**']  # Run on pushes to these branches
   pull_request:
-    branches: [ main ]           # Run on PRs to main
-
+    branches: ['**']  # Run on PRs to these branches
 # Define the jobs to run
 jobs:
   test:

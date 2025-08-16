@@ -101,7 +101,6 @@ def test_get_all_albums(test_client):
     assert len(albums) == 8
     assert albums[0]["title"] == "The Dark Side of the Moon"
     assert albums[0]["artist"] == "Pink Floyd"
-    assert False
 
 def test_get_album_by_id(test_client):
     """
