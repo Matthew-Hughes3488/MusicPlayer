@@ -8,18 +8,18 @@ from backend.database.connector.connector import DatabaseConnector
 from backend.album_service.utils.model_to_model_functions import ModelConverter
 from typing import List, Optional
 from contextlib import contextmanager
-from sqlalchemy.orm import joinedload
 
 class AlbumAlchemyRepository(AbstractAlbumAlchemyRepository):
-    def __init__(self):
+    def __init__(self, db_connector=None):
         super().__init__()
         self.model_converter = ModelConverter()
+        self.db_connector = db_connector if db_connector else DatabaseConnector()
 
 
     @contextmanager
     def db_session(self):
         """Context manager for database session."""
-        db = DatabaseConnector().get_session()
+        db = self.db_connector.get_session()
         try:
             yield db
         finally:
