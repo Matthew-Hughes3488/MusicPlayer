@@ -9,10 +9,11 @@ from backend.song_service.utils.auth_helper import auth_helper
 
 
 router = APIRouter()
-song_service = SongAlchemyService(song_repository=SongAlchemyRepository())
+def get_song_service():
+    return SongAlchemyService(song_repository=SongAlchemyRepository())
 
 @router.get("/songs", response_model=List[Song])
-async def get_all_songs(current_user=auth_helper.require_auth()):
+async def get_all_songs(current_user=auth_helper.require_auth(), song_service=Depends(get_song_service)):
     """
     Get all songs.
     :return: A list of all song objects.
@@ -20,7 +21,7 @@ async def get_all_songs(current_user=auth_helper.require_auth()):
     return song_service.get_all_songs()
 
 @router.get("/songs/{song_id}", response_model=Song)
-async def get_song_by_id(song_id: int, current_user=auth_helper.require_auth()):
+async def get_song_by_id(song_id: int, current_user=auth_helper.require_auth(), song_service=Depends(get_song_service)):
     """
     Get an song by its ID.
     :param song_id: The ID of the song to retrieve.
@@ -32,7 +33,7 @@ async def get_song_by_id(song_id: int, current_user=auth_helper.require_auth()):
         raise HTTPException(status_code=404, detail=str(e))
     
 @router.post("/songs", response_model=Song)
-async def create_song(song_input: SongInput, current_user=auth_helper.require_role("admin")):
+async def create_song(song_input: SongInput, current_user=auth_helper.require_role("admin"), song_service=Depends(get_song_service)):
     """
     Create a new song.
     :param song_input: The song input object to create.
@@ -46,7 +47,7 @@ async def create_song(song_input: SongInput, current_user=auth_helper.require_ro
         raise HTTPException(status_code=400, detail=str(e))
     
 @router.put("/songs/{song_id}", response_model=Song)
-async def update_song(song_id: int, song_input: SongUpdateInput, current_user=auth_helper.require_role("admin")):
+async def update_song(song_id: int, song_input: SongUpdateInput, current_user=auth_helper.require_role("admin"), song_service=Depends(get_song_service)):
     """
     Update an existing song.
     :param song_id: The ID of the song to update.
@@ -61,7 +62,7 @@ async def update_song(song_id: int, song_input: SongUpdateInput, current_user=au
         raise HTTPException(status_code=400, detail=str(e))
     
 @router.delete("/songs/{song_id}")
-async def delete_song(song_id: int, current_user=auth_helper.require_role("admin")):
+async def delete_song(song_id: int, current_user=auth_helper.require_role("admin"), song_service=Depends(get_song_service)):
     """
     Delete an song by its ID.
     :param song_id: The ID of the song to delete.

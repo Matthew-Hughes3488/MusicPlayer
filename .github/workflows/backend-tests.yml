@@ -38,6 +38,97 @@ jobs:
           name: album_service-test-results
           path: backend/pytest-report.xml
 
+  song_service_tests:
+    name: Song Service Tests
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.13'
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r backend/requirements.txt
+
+      - name: Run song_service tests
+        run: |
+          PYTHONPATH=. pytest backend/song_service/tests/test_song_api.py 
+        env:
+          JWT_SECRET_KEY: "test-secret-key"
+          JWT_ALGORITHM: "HS256"
+
+      - name: Upload test results
+        uses: actions/upload-artifact@v4
+        if: failure()
+        with:
+          name: song_service-test-results
+          path: backend/pytest-report.xml
+  user_service_tests:
+    name: User Service Tests
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.13'
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r backend/requirements.txt
+
+      - name: Run user_service tests
+        run: |
+          PYTHONPATH=. pytest backend/user_service/tests/test_user_api.py
+        env:
+          JWT_SECRET_KEY: "test-secret-key"
+          JWT_ALGORITHM: "HS256"
+
+      - name: Upload test results
+        uses: actions/upload-artifact@v4
+        if: failure()
+        with:
+          name: user_service-test-results
+          path: backend/pytest-report.xml
+  auth_service_tests:
+    name: Auth Service Tests
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.13'
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r backend/requirements.txt
+
+      - name: Run auth_service tests
+        run: |
+          PYTHONPATH=. pytest backend/auth_service/tests/test_auth_api.py
+        env:
+          JWT_SECRET_KEY: "test-secret-key"
+          JWT_ALGORITHM: "HS256"
+
+      - name: Upload test results
+        uses: actions/upload-artifact@v4
+        if: failure()
+        with:
+          name: auth_service-test-results
+          path: backend/pytest-report.xml
+
   # Copy this job for each service, e.g. song_service, auth_service, etc.
   # Just update the job id, name, and pytest path.
 

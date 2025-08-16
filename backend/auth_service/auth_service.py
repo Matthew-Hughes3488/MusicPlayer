@@ -13,21 +13,21 @@ class AuthService:
 
     def login(self, login_request: LoginRequest) -> LoginResponse:
         """Login user and return JWT token."""
-        try:
-            user = self.get_user_by_email(login_request.email)
-            if user and self.verify_password(login_request.password, user['password_hash']):
-                token = self.generate_token(AuthInfoModel(**user))
-                return LoginResponse(auth_token=token, user_id=user['user_id'])
-            return None
-        except Exception as e:
-            print(f"Login failed: {e}")
-            return None
+        user = self.get_user_by_email(login_request.email)
+        if not user:
+            raise AuthenticationError("Invalid credentials")
+            
+        if not self.verify_password(login_request.password, user['password_hash']):
+            raise AuthenticationError("Invalid credentials")
+            
+        token = self.generate_token(AuthInfoModel(**user))
+        if not token:
+            raise Exception("Failed to generate authentication token")
+            
+        return LoginResponse(auth_token=token, user_id=user['user_id'])
         
     def verify_password(self, plain_password: str, hashed_password: str) -> bool:
-        is_valid = password_manager.verify_password(plain_password, hashed_password)
-        if not is_valid:
-            raise AuthenticationError("Invalid password")
-        return is_valid
+        return password_manager.verify_password(plain_password, hashed_password)
 
     def get_user_by_email(self, email: str):
         """Fetch user details by email from the user service."""
@@ -35,11 +35,15 @@ class AuthService:
             print(f'Sending request to user service at {self.user_service_url}/users/email/{email}')
             response = requests.get(f"{self.user_service_url}/users/email/{email}")
             if response.status_code == 404:
-                raise UserNotFoundError(f"User with email {email} not found")
-            return response.json() if response.status_code == 200 else None
+                return None  # User not found - let login method handle this
+            elif response.status_code == 200:
+                return response.json()
+            else:
+                raise Exception(f"User service returned status {response.status_code}")
+        except requests.RequestException as e:
+            raise Exception(f"Failed to connect to user service: {e}")
         except Exception as e:
-            print(f"Error fetching user by email: {e}")
-            return None
+            raise Exception(f"Error fetching user by email: {e}")
 
     def generate_token(self, user: AuthInfoModel) -> str:
         """Generate a JWT token for the user."""
