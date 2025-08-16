@@ -13,155 +13,94 @@ Usage:
 """
 
 from datetime import datetime
-from backend.database.models.user_model import User as UserModel
+from backend.database.models.user_model import User
 from backend.auth_service.model.auth_info_model import AuthInfoModel
 from backend.auth_service.security_utils import password_manager
 
 # =============================================================================
-# MOCK USERS - Realistic user data for authentication testing
+# MOCK USERS - Realistic user data matching actual User database model
 # =============================================================================
 
 MOCK_USERS = [
     # Regular Users
-    UserModel(
-        user_id=1,
+    User(
+        id=1,
         username="john_doe",
         email="john.doe@example.com",
         password_hash=password_manager.hash_password("password123"),
         first_name="John",
         last_name="Doe",
-        role="user",
-        is_active=True,
         created_at=datetime(2023, 1, 15, 10, 0, 0),
         updated_at=datetime(2023, 1, 15, 10, 0, 0)
     ),
     
-    UserModel(
-        user_id=2,
+    User(
+        id=2,
         username="jane_smith",
         email="jane.smith@example.com",
         password_hash=password_manager.hash_password("securepass456"),
         first_name="Jane",
         last_name="Smith",
-        role="user",
-        is_active=True,
         created_at=datetime(2023, 2, 10, 14, 30, 0),
         updated_at=datetime(2023, 2, 10, 14, 30, 0)
     ),
     
-    UserModel(
-        user_id=3,
+    User(
+        id=3,
         username="music_lover",
         email="music.lover@example.com",
         password_hash=password_manager.hash_password("melody789"),
         first_name="Alex",
         last_name="Johnson",
-        role="user",
-        is_active=True,
         created_at=datetime(2023, 3, 5, 9, 15, 0),
         updated_at=datetime(2023, 3, 5, 9, 15, 0)
     ),
     
     # Admin Users
-    UserModel(
-        user_id=4,
+    User(
+        id=4,
         username="admin_user",
         email="admin@example.com",
         password_hash=password_manager.hash_password("admin123"),
         first_name="Admin",
         last_name="User",
-        role="admin",
-        is_active=True,
         created_at=datetime(2023, 1, 1, 8, 0, 0),
         updated_at=datetime(2023, 1, 1, 8, 0, 0)
     ),
     
-    UserModel(
-        user_id=5,
+    User(
+        id=5,
         username="super_admin",
         email="superadmin@example.com",
         password_hash=password_manager.hash_password("superadmin456"),
         first_name="Super",
         last_name="Admin",
-        role="admin",
-        is_active=True,
         created_at=datetime(2023, 1, 1, 8, 0, 0),
         updated_at=datetime(2023, 1, 1, 8, 0, 0)
     ),
     
-    # Premium Users
-    UserModel(
-        user_id=6,
-        username="premium_user",
-        email="premium@example.com",
-        password_hash=password_manager.hash_password("premium789"),
-        first_name="Premium",
-        last_name="User",
-        role="premium",
-        is_active=True,
-        created_at=datetime(2023, 4, 20, 16, 45, 0),
-        updated_at=datetime(2023, 4, 20, 16, 45, 0)
-    ),
-    
-    # Inactive User (for testing account status)
-    UserModel(
-        user_id=7,
-        username="inactive_user",
-        email="inactive@example.com",
-        password_hash=password_manager.hash_password("inactive123"),
-        first_name="Inactive",
-        last_name="User",
-        role="user",
-        is_active=False,
-        created_at=datetime(2023, 5, 12, 11, 20, 0),
-        updated_at=datetime(2023, 5, 12, 11, 20, 0)
-    ),
-    
     # Test User for edge cases
-    UserModel(
-        user_id=8,
+    User(
+        id=6,
         username="test_user",
         email="test.user@example.com",
         password_hash=password_manager.hash_password("testpass"),
         first_name="Test",
         last_name="User",
-        role="user",
-        is_active=True,
         created_at=datetime(2023, 6, 8, 13, 10, 0),
         updated_at=datetime(2023, 6, 8, 13, 10, 0)
     ),
-]
-
-# =============================================================================
-# MOCK AUTH INFO - For direct AuthInfoModel testing
-# =============================================================================
-
-MOCK_AUTH_INFO = [
-    AuthInfoModel(
-        user_id=1,
-        username="john_doe",
-        email="john.doe@example.com",
-        password_hash=password_manager.hash_password("password123"),
-        role="user",
-        is_active=True
-    ),
     
-    AuthInfoModel(
-        user_id=4,
-        username="admin_user",
-        email="admin@example.com",
-        password_hash=password_manager.hash_password("admin123"),
-        role="admin",
-        is_active=True
-    ),
-    
-    AuthInfoModel(
-        user_id=7,
-        username="inactive_user",
-        email="inactive@example.com",
-        password_hash=password_manager.hash_password("inactive123"),
-        role="user",
-        is_active=False
+    # User with no last name (testing optional fields)
+    User(
+        id=7,
+        username="minimal_user",
+        email="minimal@example.com",
+        password_hash=password_manager.hash_password("minimal123"),
+        first_name="Min",
+        last_name=None,
+        created_at=datetime(2023, 7, 20, 12, 0, 0),
+        updated_at=None
     ),
 ]
 
@@ -169,29 +108,34 @@ MOCK_AUTH_INFO = [
 # HELPER FUNCTIONS FOR TESTS
 # =============================================================================
 
-def get_user_by_id(user_id: int) -> UserModel:
+def get_user_by_id(user_id: int) -> User:
     """Get a mock user by ID for testing."""
-    return next((user for user in MOCK_USERS if user.user_id == user_id), None)
+    return next((user for user in MOCK_USERS if user.id == user_id), None)
 
-def get_user_by_email(email: str) -> UserModel:
+def get_user_by_email(email: str) -> User:
     """Get a mock user by email for testing."""
     return next((user for user in MOCK_USERS if user.email.lower() == email.lower()), None)
 
-def get_user_by_username(username: str) -> UserModel:
+def get_user_by_username(username: str) -> User:
     """Get a mock user by username for testing."""
     return next((user for user in MOCK_USERS if user.username.lower() == username.lower()), None)
 
-def get_users_by_role(role: str) -> list[UserModel]:
-    """Get all mock users with a specific role."""
-    return [user for user in MOCK_USERS if user.role.lower() == role.lower()]
+def get_users_by_role(role: str) -> list[User]:
+    """Get all mock users with a specific role (simulated based on username patterns)."""
+    # Since the User model doesn't have a role field, we'll determine role by username patterns
+    admin_users = [user for user in MOCK_USERS if "admin" in user.username.lower()]
+    if role.lower() == "admin":
+        return admin_users
+    else:
+        return [user for user in MOCK_USERS if user not in admin_users]
 
-def get_active_users() -> list[UserModel]:
-    """Get all active mock users."""
-    return [user for user in MOCK_USERS if user.is_active]
+def get_active_users() -> list[User]:
+    """Get all active mock users (all users are considered active since User model has no is_active field)."""
+    return MOCK_USERS
 
-def get_inactive_users() -> list[UserModel]:
-    """Get all inactive mock users."""
-    return [user for user in MOCK_USERS if not user.is_active]
+def get_inactive_users() -> list[User]:
+    """Get all inactive mock users (returns empty list since User model has no is_active field)."""
+    return []
 
 def get_valid_login_credentials() -> list[dict]:
     """Get valid email/password combinations for login testing."""
@@ -207,7 +151,6 @@ def get_invalid_login_credentials() -> list[dict]:
     return [
         {"email": "john.doe@example.com", "password": "wrongpassword"},
         {"email": "nonexistent@example.com", "password": "password123"},
-        {"email": "inactive@example.com", "password": "inactive123"},  # Valid creds but inactive user
         {"email": "", "password": "password123"},
         {"email": "john.doe@example.com", "password": ""},
     ]
@@ -299,10 +242,8 @@ MOCK_DATA_STATS = {
     "total_users": len(MOCK_USERS),
     "active_users": len(get_active_users()),
     "inactive_users": len(get_inactive_users()),
-    "roles": list(set(user.role for user in MOCK_USERS)),
     "admin_count": len(get_users_by_role("admin")),
     "user_count": len(get_users_by_role("user")),
-    "premium_count": len(get_users_by_role("premium")),
 }
 
 def print_mock_data_summary():
@@ -310,8 +251,7 @@ def print_mock_data_summary():
     print("👤 Auth Service Mock Data Summary:")
     print(f"   Total Users: {MOCK_DATA_STATS['total_users']}")
     print(f"   Active: {MOCK_DATA_STATS['active_users']}, Inactive: {MOCK_DATA_STATS['inactive_users']}")
-    print(f"   Roles: {', '.join(MOCK_DATA_STATS['roles'])}")
-    print(f"   Admins: {MOCK_DATA_STATS['admin_count']}, Users: {MOCK_DATA_STATS['user_count']}, Premium: {MOCK_DATA_STATS['premium_count']}")
+    print(f"   Admins: {MOCK_DATA_STATS['admin_count']}, Users: {MOCK_DATA_STATS['user_count']}")
 
 if __name__ == "__main__":
     # If run directly, print summary of mock data
