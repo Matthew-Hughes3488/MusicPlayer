@@ -1,0 +1,59 @@
+# GitHub Actions CI/CD Pipeline for Backend Tests
+# This runs automatically on push and pull requests to main branch
+
+name: Backend Tests
+
+# When to run the pipeline
+on:
+  push:
+    branches: [ main, develop ]  # Run on pushes to these branches
+  pull_request:
+    branches: [ main ]           # Run on PRs to main
+
+# Define the jobs to run
+jobs:
+  test:
+    # Use Ubuntu as the runner environment
+    runs-on: ubuntu-latest
+    
+    steps:
+    # Step 1: Get the code
+    - name: Checkout code
+      uses: actions/checkout@v4
+    
+    # Step 2: Set up Python environment
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.13'  # Match your local Python version
+    
+    # Step 3: Install dependencies
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r backend/requirements.txt
+    
+    # Step 4: Run the tests
+    - name: Run tests
+      run: |
+        cd backend
+        PYTHONPATH=. pytest backend/album_service/tests/test_album_api.py
+      env:
+        # Set any environment variables your tests need
+        JWT_SECRET_KEY: "test-secret-key"
+        JWT_ALGORITHM: "HS256"
+    
+    # Optional: Step 5 - Upload test results (if tests fail, you can see details)
+    - name: Upload test results
+      uses: actions/upload-artifact@v3
+      if: failure()  # Only upload if tests failed
+      with:
+        name: test-results
+        path: backend/pytest-report.xml
+
+# Optional: Add notifications on failure
+# You can extend this to:
+# - Run tests on multiple Python versions
+# - Add code coverage reporting
+# - Deploy on successful tests
+# - Send notifications to Slack/Discord
