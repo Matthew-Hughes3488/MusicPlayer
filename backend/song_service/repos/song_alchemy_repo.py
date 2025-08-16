@@ -5,10 +5,14 @@ from backend.database.connector.connector import DatabaseConnector
 from contextlib import contextmanager
 
 class SongAlchemyRepository(AbstractAlchemySongRepo):
+    def __init__(self, db_connector=None):
+        super().__init__()
+        self.db_connector = db_connector if db_connector else DatabaseConnector()
+
     @contextmanager
     def db_session(self):
         """Context manager for database session."""
-        db = DatabaseConnector().get_session()
+        db = self.db_connector.get_session()
         try:
             yield db
         finally:
