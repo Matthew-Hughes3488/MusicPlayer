@@ -2,10 +2,10 @@
 Mock Test Data for User Service API Tests
 
 This file contains realistic mock data for testing the User Service API.
-All data is in SQLAlchemy model format for direct insertion into test databases.
+All data matches the actual database models and can be used for direct insertion into test databases.
 
 Usage:
-    from backend.user_service.tests.mock_test_data import MOCK_USERS, MOCK_USER_PREFERENCES
+    from backend.user_service.tests.mock_test_data import MOCK_USERS, get_user_by_id
     
     # In your test setup
     db_session.add_all(MOCK_USERS)
@@ -13,197 +13,123 @@ Usage:
 """
 
 from datetime import datetime
-from backend.database.models.user_model import User as UserModel
+from backend.database.models.user_model import User
 
 # =============================================================================
-# MOCK USERS - Realistic user data for user management testing
+# MOCK USERS - Realistic user data matching the actual User database model
 # =============================================================================
 
 MOCK_USERS = [
-    # Active Regular Users
-    UserModel(
-        user_id=1,
+    User(
+        id=1,
         username="john_doe",
         email="john.doe@example.com",
-        password_hash="$2b$12$hashed_password_john",  # Represents hashed password
+        password_hash="$2b$12$hashed_password_john_example",
         first_name="John",
         last_name="Doe",
-        role="user",
-        is_active=True,
-        date_of_birth=datetime(1990, 5, 15),
-        phone_number="+1234567890",
-        profile_picture_url="https://example.com/profiles/john_doe.jpg",
-        bio="Music enthusiast and software developer",
-        location="New York, NY",
         created_at=datetime(2023, 1, 15, 10, 0, 0),
         updated_at=datetime(2023, 8, 20, 14, 30, 0)
     ),
     
-    UserModel(
-        user_id=2,
+    User(
+        id=2,
         username="jane_smith",
         email="jane.smith@example.com",
-        password_hash="$2b$12$hashed_password_jane",
+        password_hash="$2b$12$hashed_password_jane_example",
         first_name="Jane",
         last_name="Smith",
-        role="user",
-        is_active=True,
-        date_of_birth=datetime(1988, 9, 23),
-        phone_number="+1987654321",
-        profile_picture_url="https://example.com/profiles/jane_smith.jpg",
-        bio="Indie music lover and artist",
-        location="Los Angeles, CA",
         created_at=datetime(2023, 2, 10, 14, 30, 0),
         updated_at=datetime(2023, 9, 5, 16, 15, 0)
     ),
     
-    UserModel(
-        user_id=3,
+    User(
+        id=3,
         username="music_maven",
         email="music.maven@example.com",
-        password_hash="$2b$12$hashed_password_maven",
+        password_hash="$2b$12$hashed_password_maven_example",
         first_name="Alex",
         last_name="Johnson",
-        role="user",
-        is_active=True,
-        date_of_birth=datetime(1995, 12, 8),
-        phone_number="+1555123456",
-        profile_picture_url="https://example.com/profiles/alex_johnson.jpg",
-        bio="Electronic music producer and DJ",
-        location="Miami, FL",
         created_at=datetime(2023, 3, 5, 9, 15, 0),
         updated_at=datetime(2023, 10, 12, 11, 20, 0)
     ),
     
-    # Premium Users
-    UserModel(
-        user_id=4,
-        username="premium_listener",
-        email="premium@example.com",
-        password_hash="$2b$12$hashed_password_premium",
+    User(
+        id=4,
+        username="sarah_wilson",
+        email="sarah.wilson@example.com",
+        password_hash="$2b$12$hashed_password_sarah_example",
         first_name="Sarah",
         last_name="Wilson",
-        role="premium",
-        is_active=True,
-        date_of_birth=datetime(1985, 7, 14),
-        phone_number="+1444567890",
-        profile_picture_url="https://example.com/profiles/sarah_wilson.jpg",
-        bio="Classical music aficionado and concert organizer",
-        location="Chicago, IL",
         created_at=datetime(2023, 4, 20, 16, 45, 0),
         updated_at=datetime(2023, 11, 8, 10, 30, 0)
     ),
     
-    UserModel(
-        user_id=5,
+    User(
+        id=5,
         username="jazz_enthusiast",
         email="jazz.lover@example.com",
-        password_hash="$2b$12$hashed_password_jazz",
+        password_hash="$2b$12$hashed_password_jazz_example",
         first_name="Miles",
         last_name="Davis",
-        role="premium",
-        is_active=True,
-        date_of_birth=datetime(1982, 3, 22),
-        phone_number="+1333789012",
-        profile_picture_url="https://example.com/profiles/miles_davis.jpg",
-        bio="Jazz musician and music teacher",
-        location="New Orleans, LA",
         created_at=datetime(2023, 5, 12, 11, 20, 0),
         updated_at=datetime(2023, 12, 15, 13, 45, 0)
     ),
     
-    # Admin Users
-    UserModel(
-        user_id=6,
+    User(
+        id=6,
         username="admin_user",
         email="admin@example.com",
-        password_hash="$2b$12$hashed_password_admin",
+        password_hash="$2b$12$hashed_password_admin_example",
         first_name="Admin",
         last_name="User",
-        role="admin",
-        is_active=True,
-        date_of_birth=datetime(1980, 1, 1),
-        phone_number="+1111222333",
-        profile_picture_url="https://example.com/profiles/admin.jpg",
-        bio="Platform administrator",
-        location="San Francisco, CA",
         created_at=datetime(2023, 1, 1, 8, 0, 0),
         updated_at=datetime(2023, 12, 1, 9, 0, 0)
     ),
     
-    # Inactive User (for testing)
-    UserModel(
-        user_id=7,
-        username="inactive_user",
-        email="inactive@example.com",
-        password_hash="$2b$12$hashed_password_inactive",
-        first_name="Inactive",
-        last_name="User",
-        role="user",
-        is_active=False,
-        date_of_birth=datetime(1992, 11, 30),
-        phone_number="+1222333444",
-        profile_picture_url="https://example.com/profiles/inactive.jpg",
-        bio="Former user account",
-        location="Seattle, WA",
-        created_at=datetime(2023, 6, 8, 13, 10, 0),
-        updated_at=datetime(2023, 8, 10, 15, 20, 0)
-    ),
-    
-    # Recently Joined Users
-    UserModel(
-        user_id=8,
+    User(
+        id=7,
         username="new_member",
         email="newbie@example.com",
-        password_hash="$2b$12$hashed_password_new",
+        password_hash="$2b$12$hashed_password_new_example",
         first_name="Emma",
         last_name="Brown",
-        role="user",
-        is_active=True,
-        date_of_birth=datetime(2000, 4, 18),
-        phone_number="+1777888999",
-        profile_picture_url=None,  # No profile picture yet
-        bio="New to the platform, love discovering music!",
-        location="Austin, TX",
         created_at=datetime(2023, 12, 1, 12, 0, 0),
         updated_at=datetime(2023, 12, 1, 12, 0, 0)
     ),
     
-    UserModel(
-        user_id=9,
+    User(
+        id=8,
         username="rock_fan_2023",
         email="rock.fan@example.com",
-        password_hash="$2b$12$hashed_password_rock",
+        password_hash="$2b$12$hashed_password_rock_example",
         first_name="David",
         last_name="Rodriguez",
-        role="user",
-        is_active=True,
-        date_of_birth=datetime(1993, 8, 7),
-        phone_number="+1666777888",
-        profile_picture_url="https://example.com/profiles/david_rodriguez.jpg",
-        bio="Rock and metal music collector",
-        location="Denver, CO",
         created_at=datetime(2023, 11, 15, 18, 30, 0),
         updated_at=datetime(2023, 12, 10, 20, 15, 0)
     ),
     
-    # User with minimal info (for edge case testing)
-    UserModel(
-        user_id=10,
+    # User with optional last_name as None (testing edge cases)
+    User(
+        id=9,
         username="minimal_user",
         email="minimal@example.com",
-        password_hash="$2b$12$hashed_password_minimal",
+        password_hash="$2b$12$hashed_password_minimal_example",
         first_name="Min",
-        last_name="User",
-        role="user",
-        is_active=True,
-        date_of_birth=None,  # Optional field
-        phone_number=None,   # Optional field
-        profile_picture_url=None,
-        bio=None,
-        location=None,
+        last_name=None,  # Optional field
         created_at=datetime(2023, 10, 20, 9, 45, 0),
-        updated_at=datetime(2023, 10, 20, 9, 45, 0)
+        updated_at=None  # Optional field
+    ),
+    
+    # User with no updates (updated_at = None)
+    User(
+        id=10,
+        username="never_updated",
+        email="never.updated@example.com",
+        password_hash="$2b$12$hashed_password_never_example",
+        first_name="Never",
+        last_name="Updated",
+        created_at=datetime(2023, 6, 8, 13, 10, 0),
+        updated_at=None
     ),
 ]
 
@@ -211,45 +137,38 @@ MOCK_USERS = [
 # HELPER FUNCTIONS FOR TESTS
 # =============================================================================
 
-def get_user_by_id(user_id: int) -> UserModel:
+def get_user_by_id(user_id: int) -> User:
     """Get a mock user by ID for testing."""
-    return next((user for user in MOCK_USERS if user.user_id == user_id), None)
+    return next((user for user in MOCK_USERS if user.id == user_id), None)
 
-def get_user_by_email(email: str) -> UserModel:
+def get_user_by_email(email: str) -> User:
     """Get a mock user by email for testing."""
     return next((user for user in MOCK_USERS if user.email.lower() == email.lower()), None)
 
-def get_user_by_username(username: str) -> UserModel:
+def get_user_by_username(username: str) -> User:
     """Get a mock user by username for testing."""
     return next((user for user in MOCK_USERS if user.username.lower() == username.lower()), None)
 
-def get_users_by_role(role: str) -> list[UserModel]:
-    """Get all mock users with a specific role."""
-    return [user for user in MOCK_USERS if user.role.lower() == role.lower()]
+def get_users_with_last_name() -> list[User]:
+    """Get all users who have a last name."""
+    return [user for user in MOCK_USERS if user.last_name is not None]
 
-def get_users_by_location(location: str) -> list[UserModel]:
-    """Get users from a specific location."""
-    return [user for user in MOCK_USERS if user.location and location.lower() in user.location.lower()]
+def get_users_without_last_name() -> list[User]:
+    """Get all users who don't have a last name."""
+    return [user for user in MOCK_USERS if user.last_name is None]
 
-def get_active_users() -> list[UserModel]:
-    """Get all active mock users."""
-    return [user for user in MOCK_USERS if user.is_active]
+def get_users_with_updates() -> list[User]:
+    """Get users who have been updated (updated_at is not None)."""
+    return [user for user in MOCK_USERS if user.updated_at is not None]
 
-def get_inactive_users() -> list[UserModel]:
-    """Get all inactive mock users."""
-    return [user for user in MOCK_USERS if not user.is_active]
+def get_users_never_updated() -> list[User]:
+    """Get users who have never been updated (updated_at is None)."""
+    return [user for user in MOCK_USERS if user.updated_at is None]
 
-def get_users_with_profile_pictures() -> list[UserModel]:
-    """Get users who have profile pictures."""
-    return [user for user in MOCK_USERS if user.profile_picture_url]
-
-def get_users_without_profile_pictures() -> list[UserModel]:
-    """Get users who don't have profile pictures."""
-    return [user for user in MOCK_USERS if not user.profile_picture_url]
-
-def get_recently_joined_users(days: int = 30) -> list[UserModel]:
-    """Get users who joined within the last specified days."""
-    cutoff_date = datetime.now() - datetime.timedelta(days=days)
+def get_recently_created_users(days: int = 30) -> list[User]:
+    """Get users who were created within the last specified days."""
+    from datetime import datetime, timedelta
+    cutoff_date = datetime.now() - timedelta(days=days)
     return [user for user in MOCK_USERS if user.created_at >= cutoff_date]
 
 def get_user_for_create_test() -> dict:
@@ -257,59 +176,70 @@ def get_user_for_create_test() -> dict:
     return {
         "username": "test_new_user",
         "email": "test.new@example.com",
-        "password": "testpassword123",
+        "password": "testpassword123",  # Will be hashed by the service
         "first_name": "Test",
-        "last_name": "User",
-        "role": "user",
-        "date_of_birth": "1995-06-15",
-        "phone_number": "+1999888777",
-        "bio": "Test user for API testing",
-        "location": "Test City, TS"
+        "last_name": "User"
     }
 
 def get_user_for_update_test() -> dict:
     """Get user data for PUT/update tests (as dict for JSON serialization)."""
     return {
         "username": "updated_test_user",
+        "email": "updated.test@example.com",
         "first_name": "Updated",
-        "last_name": "TestUser",
-        "bio": "Updated bio for testing",
-        "location": "Updated City, UC",
-        "phone_number": "+1888777666"
+        "last_name": "TestUser"
     }
 
 def get_invalid_user_data() -> list[dict]:
     """Get invalid user data for validation testing."""
     return [
         {
-            # Missing required fields
-            "first_name": "Test",
-            "last_name": "User"
+            # Missing required username
+            "email": "test@example.com",
+            "password": "password123",
+            "first_name": "Test"
+        },
+        {
+            # Missing required email
+            "username": "testuser",
+            "password": "password123",
+            "first_name": "Test"
+        },
+        {
+            # Missing required password
+            "username": "testuser",
+            "email": "test@example.com",
+            "first_name": "Test"
+        },
+        {
+            # Missing required first_name
+            "username": "testuser",
+            "email": "test@example.com",
+            "password": "password123"
         },
         {
             "username": "",  # Empty username
             "email": "test@example.com",
-            "password": "password123"
+            "password": "password123",
+            "first_name": "Test"
         },
         {
             "username": "testuser",
             "email": "invalid-email",  # Invalid email format
-            "password": "password123"
+            "password": "password123",
+            "first_name": "Test"
         },
         {
             "username": "john_doe",  # Existing username
             "email": "newemail@example.com",
-            "password": "password123"
+            "password": "password123",
+            "first_name": "Test"
         },
         {
             "username": "newuser",
             "email": "john.doe@example.com",  # Existing email
-            "password": "password123"
-        },
-        {
-            "username": "testuser",
-            "email": "test@example.com",
-            "phone_number": "invalid-phone"  # Invalid phone format
+            "password": "password123",
+            "first_name": "Test"
         }
     ]
 
@@ -317,57 +247,12 @@ def get_user_search_queries() -> list[dict]:
     """Get sample search queries for user search testing."""
     return [
         {"query": "john", "expected_count": 1},
-        {"query": "user", "expected_count": 4},  # Users with "user" in username
-        {"query": "music", "expected_count": 2}, # music_maven and music.maven@example.com
+        {"query": "user", "expected_count": 2},  # admin_user, minimal_user
+        {"query": "music", "expected_count": 1}, # music_maven
+        {"query": "@example.com", "expected_count": len(MOCK_USERS)},  # All have example.com emails
         {"query": "nonexistent", "expected_count": 0},
         {"query": "", "expected_count": len(MOCK_USERS)},  # Empty query returns all
     ]
-
-# =============================================================================
-# USER PREFERENCES AND SETTINGS MOCK DATA
-# =============================================================================
-
-MOCK_USER_PREFERENCES = [
-    {
-        "user_id": 1,
-        "preferred_genres": ["Rock", "Pop", "Alternative"],
-        "notification_settings": {
-            "email_notifications": True,
-            "push_notifications": True,
-            "marketing_emails": False
-        },
-        "privacy_settings": {
-            "profile_visibility": "public",
-            "show_listening_history": True,
-            "show_playlists": True
-        },
-        "playback_settings": {
-            "auto_play": True,
-            "shuffle_default": False,
-            "volume_level": 75
-        }
-    },
-    {
-        "user_id": 2,
-        "preferred_genres": ["Indie", "Folk", "Alternative"],
-        "notification_settings": {
-            "email_notifications": True,
-            "push_notifications": False,
-            "marketing_emails": True
-        },
-        "privacy_settings": {
-            "profile_visibility": "friends",
-            "show_listening_history": False,
-            "show_playlists": True
-        },
-        "playback_settings": {
-            "auto_play": False,
-            "shuffle_default": True,
-            "volume_level": 60
-        }
-    },
-    # Add more preferences as needed...
-]
 
 # =============================================================================
 # SUMMARY STATISTICS FOR TEST VALIDATION
@@ -375,24 +260,24 @@ MOCK_USER_PREFERENCES = [
 
 MOCK_DATA_STATS = {
     "total_users": len(MOCK_USERS),
-    "active_users": len(get_active_users()),
-    "inactive_users": len(get_inactive_users()),
-    "roles": list(set(user.role for user in MOCK_USERS)),
-    "locations": list(set(user.location for user in MOCK_USERS if user.location)),
-    "users_with_photos": len(get_users_with_profile_pictures()),
-    "admin_count": len(get_users_by_role("admin")),
-    "premium_count": len(get_users_by_role("premium")),
-    "regular_count": len(get_users_by_role("user")),
+    "users_with_last_name": len(get_users_with_last_name()),
+    "users_without_last_name": len(get_users_without_last_name()),
+    "users_with_updates": len(get_users_with_updates()),
+    "users_never_updated": len(get_users_never_updated()),
+    "unique_usernames": len(set(user.username for user in MOCK_USERS)),
+    "unique_emails": len(set(user.email for user in MOCK_USERS)),
 }
 
 def print_mock_data_summary():
     """Print a summary of the mock data for debugging tests."""
     print("👥 User Service Mock Data Summary:")
     print(f"   Total Users: {MOCK_DATA_STATS['total_users']}")
-    print(f"   Active: {MOCK_DATA_STATS['active_users']}, Inactive: {MOCK_DATA_STATS['inactive_users']}")
-    print(f"   Roles: {', '.join(MOCK_DATA_STATS['roles'])}")
-    print(f"   Users with photos: {MOCK_DATA_STATS['users_with_photos']}")
-    print(f"   Admin: {MOCK_DATA_STATS['admin_count']}, Premium: {MOCK_DATA_STATS['premium_count']}, Regular: {MOCK_DATA_STATS['regular_count']}")
+    print(f"   With Last Name: {MOCK_DATA_STATS['users_with_last_name']}")
+    print(f"   Without Last Name: {MOCK_DATA_STATS['users_without_last_name']}")
+    print(f"   With Updates: {MOCK_DATA_STATS['users_with_updates']}")
+    print(f"   Never Updated: {MOCK_DATA_STATS['users_never_updated']}")
+    print(f"   Unique Usernames: {MOCK_DATA_STATS['unique_usernames']}")
+    print(f"   Unique Emails: {MOCK_DATA_STATS['unique_emails']}")
 
 if __name__ == "__main__":
     # If run directly, print summary of mock data
