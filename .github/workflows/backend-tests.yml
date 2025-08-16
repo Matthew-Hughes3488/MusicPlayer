@@ -1,117 +1,72 @@
-# GitHub Actions CI/CD Pipeline for Backend Tests
-# This runs automatically on push and pull requests to main branch
-
 name: Backend Tests
 
-# When to run the pipeline
 on:
   push:
-    branches: ['**']  # Run on pushes to these branches
+    branches: ['**']
   pull_request:
-    branches: ['**']  # Run on PRs to these branches
-# Define the jobs to run
+    branches: ['**']
+
 jobs:
-  test:
-    # Use Ubuntu as the runner environment
+  album_service_tests:
+    name: Album Service Tests
     runs-on: ubuntu-latest
-    
     steps:
-    # Step 1: Get the code
-    - name: Checkout code
-      uses: actions/checkout@v4# GitHub Actions CI/CD Pipeline for Backend Tests
-# This runs automatically on push and pull requests to main branch
+      - name: Checkout code
+        uses: actions/checkout@v4
 
-name: Backend Tests
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.13'
 
-# When to run the pipeline
-on:
-  push:
-    branches: [ main, develop ]  # Run on pushes to these branches
-  pull_request:
-    branches: [ main ]           # Run on PRs to main
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r backend/requirements.txt
 
-# Define the jobs to run
-jobs:
-  test:
-    # Use Ubuntu as the runner environment
-    runs-on: ubuntu-latest
-    
-    steps:
-    # Step 1: Get the code
-    - name: Checkout code
-      uses: actions/checkout@v4
-    
-    # Step 2: Set up Python environment
-    - name: Set up Python
-      uses: actions/setup-python@v4
-      with:
-        python-version: '3.13'  # Match your local Python version
-    
-    # Step 3: Install dependencies
-    - name: Install dependencies
-      run: |
-        python -m pip install --upgrade pip
-        pip install -r backend/requirements.txt
-    
-    # Step 4: Run the tests
-    - name: Run tests
-      run: |
-        cd backend
-        PYTHONPATH=. pytest backend/album_service/tests/test_album_api.py
-      env:
-        # Set any environment variables your tests need
-        JWT_SECRET_KEY: "test-secret-key"
-        JWT_ALGORITHM: "HS256"
-    
-    # Optional: Step 5 - Upload test results (if tests fail, you can see details)
-    - name: Upload test results
-      uses: actions/upload-artifact@v4
-      if: failure()  # Only upload if tests failed
-      with:
-        name: test-results
-        path: backend/pytest-report.xml
+      - name: Run album_service tests
+        run: |
+          cd backend
+          PYTHONPATH=. pytest backend/album_service/tests/test_album_api.py
+        env:
+          JWT_SECRET_KEY: "test-secret-key"
+          JWT_ALGORITHM: "HS256"
 
-# Optional: Add notifications on failure
-# You can extend this to:
-# - Run tests on multiple Python versions
-# - Add code coverage reporting
-# - Deploy on successful tests
-# - Send notifications to Slack/Discord
+      - name: Upload test results
+        uses: actions/upload-artifact@v4
+        if: failure()
+        with:
+          name: album_service-test-results
+          path: backend/pytest-report.xml
 
-    
-    # Step 2: Set up Python environment
-    - name: Set up Python
-      uses: actions/setup-python@v4
-      with:
-        python-version: '3.13'  # Match your local Python version
-    
-    # Step 3: Install dependencies
-    - name: Install dependencies
-      run: |
-        python -m pip install --upgrade pip
-        pip install -r backend/requirements.txt
-    
-    # Step 4: Run the tests
-    - name: Run tests
-      run: |
-        cd backend
-        PYTHONPATH=. pytest backend/album_service/tests/test_album_api.py
-      env:
-        # Set any environment variables your tests need
-        JWT_SECRET_KEY: "test-secret-key"
-        JWT_ALGORITHM: "HS256"
-    
-    # Optional: Step 5 - Upload test results (if tests fail, you can see details)
-    - name: Upload test results
-      uses: actions/upload-artifact@v4
-      if: failure()  # Only upload if tests failed
-      with:
-        name: test-results
-        path: backend/pytest-report.xml
+  # Copy this job for each service, e.g. song_service, auth_service, etc.
+  # Just update the job id, name, and pytest path.
 
-# Optional: Add notifications on failure
-# You can extend this to:
-# - Run tests on multiple Python versions
-# - Add code coverage reporting
-# - Deploy on successful tests
-# - Send notifications to Slack/Discord
+  # Example for song_service:
+  # song_service_tests:
+  #   name: Song Service Tests
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - name: Checkout code
+  #       uses: actions/checkout@v4
+  #     - name: Set up Python
+  #       uses: actions/setup-python@v4
+  #       with:
+  #         python-version: '3.13'
+  #     - name: Install dependencies
+  #       run: |
+  #         python -m pip install --upgrade pip
+  #         pip install -r backend/requirements.txt
+  #     - name: Run song_service tests
+  #       run: |
+  #         cd backend
+  #         PYTHONPATH=. pytest song_service/tests/
+  #       env:
+  #         JWT_SECRET_KEY: "test-secret-key"
+  #         JWT_ALGORITHM: "HS256"
+  #     - name: Upload test results
+  #       uses: actions/upload-artifact@v4
+  #       if: failure()
+  #       with:
+  #         name: song_service-test-results
+  #         path: backend/pytest-report.xml
