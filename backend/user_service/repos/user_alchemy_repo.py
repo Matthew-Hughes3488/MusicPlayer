@@ -6,10 +6,14 @@ from typing import List, Optional
 from contextlib import contextmanager
 
 class UserAlchemyRepo(AbstractAlchemyUserRepo):
+    def __init__(self, db_connector = None):
+        super().__init__()
+        self.db_connector = db_connector or DatabaseConnector()
+
     @contextmanager
     def get_session(self):
         """Context manager to handle database sessions."""
-        connector = DatabaseConnector()
+        connector = self.db_connector
         db = connector.get_session()
         try:
             yield db
