@@ -26,7 +26,6 @@ jobs:
 
       - name: Run album_service tests
         run: |
-          cd backend
           PYTHONPATH=. pytest backend/album_service/tests/test_album_api.py
         env:
           JWT_SECRET_KEY: "test-secret-key"
