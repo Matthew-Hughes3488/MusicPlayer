@@ -1,0 +1,3 @@
+Build/Run local album service contianer
+sudo docker build -f album_service/Dockerfile -t album-service .
+sudo docker run -p 8001:8001 --name album-service album-service
