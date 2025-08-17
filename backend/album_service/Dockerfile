@@ -83,6 +83,27 @@ ENV PYTHONDONTWRITEBYTECODE=1
 # This makes logs appear immediately in 'docker logs'
 ENV PYTHONUNBUFFERED=1
 
+# Application environment variables (empty by default)
+# Override these when running the container with -e flags or --env-file
+# Based on your .env file structure:
+
+# Database configuration
+ENV DB_HOST=""
+ENV DB_PORT=""  
+ENV DB_USER=""
+ENV DB_PASSWORD=""
+ENV DB_NAME=""
+ENV DB_DRIVER=""
+ENV DATABASE_URL=""
+
+# Service URLs
+ENV USER_SERVICE_URL=""
+
+# JWT Configuration  
+ENV JWT_SECRET_KEY=""
+ENV JWT_ALGORITHM="HS256"
+
+
 # ------------------------------------------------------------------------------
 # 7. EXPOSE PORT
 # ------------------------------------------------------------------------------
