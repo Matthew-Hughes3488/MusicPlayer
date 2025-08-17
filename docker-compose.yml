@@ -1,0 +1,430 @@
+# ==============================================================================
+# DOCKER COMPOSE FILE FOR MUSIC PLAYER MICROSERVICES
+# ==============================================================================
+# This file defines how to run multiple containerized services together.
+# Docker Compose solves the "container networking nightmare" by creating
+# a virtual network where containers can talk to each other by name.
+
+# Version specifies the Compose file format
+# 3.8 is widely supported and includes all features you'll need
+version: '3.8'
+
+# ==============================================================================
+# SERVICES DEFINITION
+# ==============================================================================
+# Each service becomes a container that can communicate with others
+# Services can reference each other by their service name (like DNS)
+
+services:
+
+  # ----------------------------------------------------------------------------
+  # USER SERVICE
+  # ----------------------------------------------------------------------------
+  # Foundation service - manages user accounts and authentication data
+  # Other services depend on this for user validation
+  user-service:
+    # Build configuration
+    build:
+      context: ./backend          # Build context (where Docker looks for files)
+      dockerfile: user_service/Dockerfile    # Path to Dockerfile relative to context
+    
+    # Container name (optional, but makes logs easier to read)
+    container_name: music-user-service
+    
+    # Port mapping: host_port:container_port
+    # Access this service at http://localhost:8003
+    ports:
+      - "8003:8003"
+    
+    # Environment variables specific to this service
+    # These override the empty defaults in the Dockerfile
+    environment:
+      # Database configuration
+      - DB_HOST=${DB_HOST:-localhost}           # Use env var or default to localhost
+      - DB_PORT=${DB_PORT:-5432}                # PostgreSQL default port
+      - DB_USER=${DB_USER:-musicuser}           # Database username  
+      - DB_PASSWORD=${DB_PASSWORD:-password}    # Database password
+      - DB_NAME=${DB_NAME:-music_db}           # Database name
+      - DB_DRIVER=${DB_DRIVER:-postgresql}      # Database driver
+      - DATABASE_URL=${DATABASE_URL:-postgresql://musicuser:password@localhost:5432/music_db}
+      
+      # JWT Configuration
+      - JWT_SECRET_KEY=${JWT_SECRET_KEY:-your-super-secret-key-change-in-production}
+      - JWT_ALGORITHM=HS256
+    
+    # Load additional environment variables from .env file
+    # This file should contain sensitive data like real database passwords
+    env_file:
+      - .env
+    
+    # Health check configuration
+    # Docker Compose can wait for services to be healthy before starting dependents
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8003/health"]
+      interval: 30s        # Check every 30 seconds
+      timeout: 10s         # Wait max 10 seconds for response
+      retries: 3           # Try 3 times before marking unhealthy
+      start_period: 30s    # Wait 30 seconds before first check (startup time)
+    
+    # Restart policy - restart container if it crashes
+    restart: unless-stopped
+    
+    # Connect to custom network (defined below)
+    networks:
+      - music-network
+
+  # ----------------------------------------------------------------------------
+  # AUTH SERVICE  
+  # ----------------------------------------------------------------------------
+  # Handles login, token generation, and authentication
+  # Depends on user-service to validate user credentials
+  auth-service:
+    build:
+      context: ./backend
+      dockerfile: auth_service/Dockerfile
+    
+    container_name: music-auth-service
+    
+    # Auth service runs on port 8000
+    ports:
+      - "8000:8000"
+    
+    # Service dependencies - auth-service needs user-service to be running
+    # Docker Compose will start user-service first
+    depends_on:
+      user-service:
+        condition: service_healthy    # Wait for user-service to be healthy
+    
+    environment:
+      # Database configuration (same as user-service)
+      - DB_HOST=${DB_HOST:-localhost}
+      - DB_PORT=${DB_PORT:-5432}
+      - DB_USER=${DB_USER:-musicuser}
+      - DB_PASSWORD=${DB_PASSWORD:-password}
+      - DB_NAME=${DB_NAME:-music_db}
+      - DB_DRIVER=${DB_DRIVER:-postgresql}
+      - DATABASE_URL=${DATABASE_URL:-postgresql://musicuser:password@localhost:5432/music_db}
+      
+      # Service URLs - this is the magic of Docker Compose networking!
+      # Instead of localhost or IP addresses, we use the service name
+      # Docker Compose automatically resolves "user-service" to the container's IP
+      - USER_SERVICE_URL=http://user-service:8003
+      
+      # JWT Configuration (must match user-service)
+      - JWT_SECRET_KEY=${JWT_SECRET_KEY:-your-super-secret-key-change-in-production}
+      - JWT_ALGORITHM=HS256
+    
+    env_file:
+      - .env
+    
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 30s
+    
+    restart: unless-stopped
+    networks:
+      - music-network
+
+  # ----------------------------------------------------------------------------
+  # ALBUM SERVICE
+  # ----------------------------------------------------------------------------
+  # Manages music albums and their metadata
+  # May need to communicate with user-service for authorization
+  album-service:
+    build:
+      context: ./backend
+      dockerfile: album_service/Dockerfile
+    
+    container_name: music-album-service
+    
+    ports:
+      - "8001:8001"
+    
+    # Album service depends on user service for user validation
+    depends_on:
+      user-service:
+        condition: service_healthy
+      auth-service:
+        condition: service_healthy
+    
+    environment:
+      # Database configuration  
+      - DB_HOST=${DB_HOST:-localhost}
+      - DB_PORT=${DB_PORT:-5432}
+      - DB_USER=${DB_USER:-musicuser}
+      - DB_PASSWORD=${DB_PASSWORD:-password}
+      - DB_NAME=${DB_NAME:-music_db}
+      - DB_DRIVER=${DB_DRIVER:-postgresql}
+      - DATABASE_URL=${DATABASE_URL:-postgresql://musicuser:password@localhost:5432/music_db}
+      
+      # Service URLs for inter-service communication
+      - USER_SERVICE_URL=http://user-service:8003
+      - AUTH_SERVICE_URL=http://auth-service:8000
+      
+      # JWT Configuration
+      - JWT_SECRET_KEY=${JWT_SECRET_KEY:-your-super-secret-key-change-in-production}
+      - JWT_ALGORITHM=HS256
+    
+    env_file:
+      - .env
+    
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8001/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 30s
+    
+    restart: unless-stopped
+    networks:
+      - music-network
+
+  # ----------------------------------------------------------------------------
+  # SONG SERVICE
+  # ----------------------------------------------------------------------------
+  # Manages individual songs and their metadata
+  # May reference albums and users
+  song-service:
+    build:
+      context: ./backend
+      dockerfile: song_service/Dockerfile
+    
+    container_name: music-song-service
+    
+    ports:
+      - "8002:8002"
+    
+    # Song service depends on other services for full functionality
+    depends_on:
+      user-service:
+        condition: service_healthy
+      auth-service:
+        condition: service_healthy
+      album-service:
+        condition: service_healthy
+    
+    environment:
+      # Database configuration
+      - DB_HOST=${DB_HOST:-localhost}
+      - DB_PORT=${DB_PORT:-5432}
+      - DB_USER=${DB_USER:-musicuser}
+      - DB_PASSWORD=${DB_PASSWORD:-password}
+      - DB_NAME=${DB_NAME:-music_db}
+      - DB_DRIVER=${DB_DRIVER:-postgresql}
+      - DATABASE_URL=${DATABASE_URL:-postgresql://musicuser:password@localhost:5432/music_db}
+      
+      # Service URLs
+      - USER_SERVICE_URL=http://user-service:8003
+      - AUTH_SERVICE_URL=http://auth-service:8000
+      - ALBUM_SERVICE_URL=http://album-service:8001
+      
+      # JWT Configuration
+      - JWT_SECRET_KEY=${JWT_SECRET_KEY:-your-super-secret-key-change-in-production}
+      - JWT_ALGORITHM=HS256
+    
+    env_file:
+      - .env
+    
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8002/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 30s
+    
+    restart: unless-stopped
+    networks:
+      - music-network
+
+  # ----------------------------------------------------------------------------
+  # DATABASE SERVICE (Optional)
+  # ----------------------------------------------------------------------------
+  # Uncomment this section if you want Docker Compose to manage your database too
+  # This creates a PostgreSQL container that all services can connect to
+  
+  # database:
+  #   image: postgres:15-alpine    # Official PostgreSQL image
+  #   container_name: music-database
+  #   
+  #   # Database port (not exposed to host by default for security)
+  #   # Uncomment the ports section if you want to connect from host
+  #   # ports:
+  #   #   - "5432:5432"
+  #   
+  #   environment:
+  #     # PostgreSQL configuration
+  #     - POSTGRES_DB=${DB_NAME:-music_db}
+  #     - POSTGRES_USER=${DB_USER:-musicuser}
+  #     - POSTGRES_PASSWORD=${DB_PASSWORD:-password}
+  #     - POSTGRES_INITDB_ARGS=--encoding=UTF-8
+  #   
+  #   # Persist database data using Docker volumes
+  #   volumes:
+  #     - postgres_data:/var/lib/postgresql/data
+  #     # Optional: mount initialization scripts
+  #     # - ./database/init:/docker-entrypoint-initdb.d
+  #   
+  #   healthcheck:
+  #     test: ["CMD-SHELL", "pg_isready -U ${DB_USER:-musicuser} -d ${DB_NAME:-music_db}"]
+  #     interval: 10s
+  #     timeout: 5s
+  #     retries: 5
+  #   
+  #   restart: unless-stopped
+  #   networks:
+  #     - music-network
+
+# ==============================================================================
+# NETWORKS DEFINITION
+# ==============================================================================
+# Define custom networks for service communication
+# Without this, Docker Compose creates a default network, but explicit is better
+networks:
+  music-network:
+    driver: bridge              # Standard Docker networking
+    name: music-player-network  # Custom network name
+    
+# ==============================================================================
+# VOLUMES DEFINITION  
+# ==============================================================================
+# Define named volumes for data persistence
+# Uncomment if you enable the database service above
+# volumes:
+#   postgres_data:
+#     name: music-player-db-data
+
+# ==============================================================================
+# HOW TO USE THIS DOCKER COMPOSE FILE
+# ==============================================================================
+
+# BASIC COMMANDS:
+# ---------------
+# 1. Start all services:
+#    docker-compose up
+#
+# 2. Start in background (detached mode):
+#    docker-compose up -d
+#
+# 3. Build and start (if you changed Dockerfiles):
+#    docker-compose up --build
+#
+# 4. Stop all services:
+#    docker-compose down
+#
+# 5. Stop and remove volumes (careful - deletes data!):
+#    docker-compose down -v
+#
+# 6. View logs from all services:
+#    docker-compose logs
+#
+# 7. View logs from specific service:
+#    docker-compose logs user-service
+#
+# 8. Follow logs in real-time:
+#    docker-compose logs -f
+#
+# 9. Scale a service (run multiple instances):
+#    docker-compose up --scale song-service=3
+#
+# 10. Restart a specific service:
+#     docker-compose restart auth-service
+
+# DEBUGGING COMMANDS:
+# -------------------
+# 1. Check service status:
+#    docker-compose ps
+#
+# 2. Execute command in running container:
+#    docker-compose exec user-service bash
+#
+# 3. Run one-off command:
+#    docker-compose run user-service python -c "import sys; print(sys.path)"
+#
+# 4. View service configuration:
+#    docker-compose config
+#
+# 5. Validate compose file:
+#    docker-compose config --quiet
+
+# DEVELOPMENT WORKFLOW:
+# ---------------------
+# 1. Create .env file with your environment variables:
+#    DB_HOST=database
+#    DB_PASSWORD=your-secure-password
+#    JWT_SECRET_KEY=your-jwt-secret
+#
+# 2. Start services in development mode:
+#    docker-compose up --build
+#
+# 3. Test individual services:
+#    curl http://localhost:8003/health  # User service
+#    curl http://localhost:8000/health  # Auth service  
+#    curl http://localhost:8001/health  # Album service
+#    curl http://localhost:8002/health  # Song service
+#
+# 4. Test inter-service communication:
+#    # From inside auth-service container:
+#    docker-compose exec auth-service curl http://user-service:8003/health
+
+# PRODUCTION CONSIDERATIONS:
+# --------------------------
+# 1. Use environment-specific compose files:
+#    docker-compose -f docker-compose.yml -f docker-compose.prod.yml up
+#
+# 2. Use secrets for sensitive data instead of environment variables
+#
+# 3. Set up proper logging drivers
+#
+# 4. Configure resource limits for each service
+#
+# 5. Use external networks for better security
+#
+# 6. Implement proper backup strategies for volumes
+
+# SERVICE COMMUNICATION EXAMPLES:
+# --------------------------------
+# With Docker Compose, your services can communicate like this:
+#
+# From auth-service to user-service:
+#   POST http://user-service:8003/users/validate
+#
+# From album-service to user-service:  
+#   GET http://user-service:8003/users/123
+#
+# From song-service to album-service:
+#   GET http://album-service:8001/albums/456
+#
+# The service names (user-service, auth-service, etc.) automatically
+# resolve to the container IP addresses within the music-network.
+
+# ENVIRONMENT VARIABLE PRECEDENCE:
+# ---------------------------------
+# Docker Compose resolves environment variables in this order:
+# 1. Environment variables set in shell
+# 2. Environment variables set in .env file  
+# 3. Environment variables set in docker-compose.yml
+# 4. Default values in Dockerfile ENV instructions
+#
+# Example .env file:
+# DB_HOST=localhost
+# DB_PASSWORD=super-secure-password
+# JWT_SECRET_KEY=jwt-secret-key-for-development
+
+# NETWORKING DEEP DIVE:
+# ----------------------
+# Docker Compose creates a bridge network where:
+# - Each service gets a hostname matching its service name
+# - Services can reach each other on internal ports (8000, 8001, etc.)
+# - Only explicitly mapped ports are accessible from the host
+# - DNS resolution happens automatically
+# 
+# Network topology:
+# Host (your machine)
+# └── music-network (bridge)
+#     ├── user-service (internal IP, accessible as "user-service:8003")
+#     ├── auth-service (internal IP, accessible as "auth-service:8000")  
+#     ├── album-service (internal IP, accessible as "album-service:8001")
+#     └── song-service (internal IP, accessible as "song-service:8002")
