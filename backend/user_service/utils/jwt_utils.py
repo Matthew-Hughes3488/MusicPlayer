@@ -3,7 +3,6 @@
 import os
 from dotenv import load_dotenv
 from jose import jwt
-from backend.auth_service.model.jwt_payload import JWTPayload
 load_dotenv()
 
 # Get JWT configuration from environment variables
