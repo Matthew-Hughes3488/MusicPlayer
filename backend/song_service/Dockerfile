@@ -107,7 +107,7 @@ ENV JWT_ALGORITHM="HS256"
 # ------------------------------------------------------------------------------
 # 7. EXPOSE PORT
 # ------------------------------------------------------------------------------
-# Tell Docker that this container will listen on port 8001
+# Tell Docker that this container will listen on port 8002
 # This is DOCUMENTATION only - it doesn't actually open the port
 # You still need -p 8002:8002 when running the container
 EXPOSE 8002

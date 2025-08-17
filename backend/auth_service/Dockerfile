@@ -75,8 +75,8 @@ ENV JWT_ALGORITHM="HS256"
 # ------------------------------------------------------------------------------
 # 7. EXPOSE PORT
 # ------------------------------------------------------------------------------
-# Auth service typically runs on port 8002 (different from user:8000, album:8001)
-EXPOSE 8002
+# Auth service typically runs on port 8000 (different from user:8003, album:8001)
+EXPOSE 8000
 
 # ------------------------------------------------------------------------------
 # 8. SECURITY: NON-ROOT USER
@@ -90,13 +90,13 @@ USER appuser
 # ------------------------------------------------------------------------------
 # Check if the auth service is responding on its health endpoint
 HEALTHCHECK --interval=30s --timeout=10s --start-period=5s --retries=3 \
-    CMD curl -f http://localhost:8002/health || exit 1
+    CMD curl -f http://localhost:8000/health || exit 1
 
 # ------------------------------------------------------------------------------
 # 10. DEFAULT COMMAND
 # ------------------------------------------------------------------------------
-# Start the auth service on port 8002
-CMD ["uvicorn", "backend.auth_service.app:app", "--host", "0.0.0.0", "--port", "8002"]
+# Start the auth service on port 8000
+CMD ["uvicorn", "backend.auth_service.app:app", "--host", "0.0.0.0", "--port", "8000"]
 
 # ------------------------------------------------------------------------------
 # MICROSERVICES COMMUNICATION NOTES:
@@ -106,15 +106,15 @@ CMD ["uvicorn", "backend.auth_service.app:app", "--host", "0.0.0.0", "--port", "
 #
 # 1. DOCKER COMPOSE (Recommended for development):
 #    Services can reference each other by name:
-#    USER_SERVICE_URL=http://user-service:8000
+#    USER_SERVICE_URL=http://user-service:8003
 #
 # 2. HOST NETWORKING:
 #    Use host.docker.internal (Docker Desktop) or host networking mode
-#    USER_SERVICE_URL=http://host.docker.internal:8000
+#    USER_SERVICE_URL=http://host.docker.internal:8003
 #
 # 3. EXTERNAL SERVICES:
 #    Point to services running on the host or other servers
-#    USER_SERVICE_URL=http://192.168.1.100:8000
+#    USER_SERVICE_URL=http://192.168.1.100:8003
 
 # ------------------------------------------------------------------------------
 # ENVIRONMENT VARIABLE HANDLING:
@@ -123,14 +123,14 @@ CMD ["uvicorn", "backend.auth_service.app:app", "--host", "0.0.0.0", "--port", "
 # You can override them in several ways:
 #
 # 1. At runtime with -e flags:
-#    docker run -e USER_SERVICE_URL=http://user-service:8000 auth-service
+#    docker run -e USER_SERVICE_URL=http://user-service:8003 auth-service
 #
 # 2. With an environment file:
 #    docker run --env-file .env auth-service
 #
 # 3. In docker-compose.yml:
 #    environment:
-#      - USER_SERVICE_URL=http://user-service:8000
+#      - USER_SERVICE_URL=http://user-service:8003
 #
 # 4. Load from .env file in the container (current approach):
 #    The auth service uses python-dotenv to load .env files
@@ -142,18 +142,18 @@ CMD ["uvicorn", "backend.auth_service.app:app", "--host", "0.0.0.0", "--port", "
 #    docker build -f auth_service/Dockerfile -t auth-service .
 #
 # 2. Run standalone (for testing):
-#    docker run -p 8002:8002 \
-#      -e USER_SERVICE_URL=http://host.docker.internal:8000 \
+#    docker run -p 8000:8000 \
+#      -e USER_SERVICE_URL=http://host.docker.internal:8003 \
 #      auth-service
 #
 # 3. Run with custom environment file:
-#    docker run -p 8002:8002 --env-file .env auth-service
+#    docker run -p 8000:8000 --env-file .env auth-service
 #
 # 4. Test the health endpoint:
-#    curl http://localhost:8002/health
+#    curl http://localhost:8000/health
 #
 # 5. Test authentication (requires user service running):
-#    curl -X POST http://localhost:8002/auth/login \
+#    curl -X POST http://localhost:8000/auth/login \
 #      -H "Content-Type: application/json" \
 #      -d '{"email": "user@example.com", "password": "password"}'
 
