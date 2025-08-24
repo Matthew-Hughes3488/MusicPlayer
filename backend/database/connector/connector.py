@@ -18,7 +18,6 @@ class DatabaseConnector:
         self.DATABASE_URL = os.getenv("DATABASE_URL") or (
             f"mssql+pyodbc://{self.DB_USER}:{self.DB_PASSWORD}@{self.DB_HOST}:{self.DB_PORT}/{self.DB_NAME}?driver={self.DB_DRIVER.replace(' ', '+')}"
         )
-        print("Connecting to database:", self.DATABASE_URL)
         self.engine = create_engine(self.DATABASE_URL, echo=True)
         self.SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=self.engine)
 
